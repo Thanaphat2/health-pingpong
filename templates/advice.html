@@ -1,1 +1,137 @@
-web: gunicorn app:app
+{% extends "base.html" %}
+
+{% block title %}HealthPingpong - คำแนะนำ 3 อ. 3 ลด{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center justify-center p-3.5 bg-teal-50 rounded-2xl mb-4 shadow-2xs">
+            <span class="text-4xl">🥗</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">คู่มือสุขภาพ: หลัก 3 อ. และ 3 ลด</h1>
+        <p class="text-slate-600 text-base leading-relaxed">
+            แนวทางการปฏิบัติเพื่อการป้องกันและควบคุมโรคเรื้อรัง (เบาหวาน ความดันโลหิตสูง) ด้วยหลักการดูแลตัวเองง่ายๆ ในชีวิตประจำวัน
+        </p>
+    </div>
+
+    <!-- 3 อ. Section -->
+    <div class="mb-16">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+            <span class="text-teal-600">🌟</span>
+            <span>หลัก 3 อ. (อ.อาหาร, อ.ออกกำลังกาย, อ.อารมณ์)</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- อ.1: อาหาร -->
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl font-bold mb-6">
+                        🍲
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">1. อ. อาหาร</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                        กินอาหารให้ครบ 5 หมู่ในสัดส่วนที่เหมาะสม เน้นผักพื้นบ้านและผลไม้รสไม่หวานจัด ควบคุมปริมาณแป้งและข้าวกล้อง
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-700">
+                        <li class="flex items-center space-x-2">
+                            <span class="text-teal-600 font-bold">✓</span>
+                            <span>สูตรอาหารจานสุขภาพ: ผัก 2 ส่วน ข้าว/แป้ง 1 ส่วน เนื้อสัตว์ 1 ส่วน</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="text-teal-600 font-bold">✓</span>
+                            <span>ดื่มน้ำเปล่าสะอาดวันละ 6-8 แก้ว</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- อ.2: ออกกำลังกาย -->
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl font-bold mb-6">
+                        🏃‍♂️
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">2. อ. ออกกำลังกาย</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                        ออกกำลังกายอย่างสม่ำเสมอเพื่อกระตุ้นระบบเผาผลาญและเสริมสร้างความแข็งแรงของหัวใจและหลอดเลือด
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-700">
+                        <li class="flex items-center space-x-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span>สัปดาห์ละอย่างน้อย 3-5 วัน ครั้งละ 30 นาทีขึ้นไป</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span>เลือกกิจกรรมที่เหมาะสม เช่น เดินเร็ว ปั่นจักรยาน หรือว่ายน้ำ</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- อ.3: อารมณ์ -->
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl font-bold mb-6">
+                        🧘‍♀️
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">3. อ. อารมณ์</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                        จัดการความเครียดทำจิตใจให้สงบและผ่อนคลาย เนื่องจากความเครียดส่งผลให้ระดับน้ำตาลและความดันโลหิตสูงขึ้น
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-700">
+                        <li class="flex items-center space-x-2">
+                            <span class="text-amber-600 font-bold">✓</span>
+                            <span>ฝึกหายใจลึกๆ นั่งสมาธิ หรือทำกิจกรรมที่ชื่นชอบ (ฟังเพลง, ปลูกต้นไม้)</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="text-amber-600 font-bold">✓</span>
+                            <span>นอนหลับพักผ่อนให้สนิทอย่างน้อย 7-8 ชั่วโมงต่อวัน</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 3 ลด Section -->
+    <div class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center space-x-2">
+            <span class="text-rose-600">🛡️</span>
+            <span>หลัก 3 ลด (ลดหวาน, ลดมัน, ลดเค็ม)</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-6 rounded-2xl bg-rose-50/50 border border-rose-100">
+                <div class="text-xl font-bold text-rose-700 mb-2">1. ลดหวาน</div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    งดเครื่องดื่มรสหวานจัด น้ำอัดลม ขนมหวาน ชาไข่มุก และผลไม้เชื่อม น้ำตาลสะสมในเลือดจะได้อยู่ในเกณฑ์ปกติ
+                </p>
+            </div>
+            <div class="p-6 rounded-2xl bg-orange-50/50 border border-orange-100">
+                <div class="text-xl font-bold text-orange-700 mb-2">2. ลดมัน</div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    หลีกเลี่ยงอาหารทอด ของมัน อาหารฟาสต์ฟู้ด หนังหมู หนังไก่ และกะทิข้นๆ เพื่อป้องกันไขมันในเลือดสูงและโรคหัวใจ
+                </p>
+            </div>
+            <div class="p-6 rounded-2xl bg-amber-50/50 border border-amber-100">
+                <div class="text-xl font-bold text-amber-700 mb-2">3. ลดเค็ม</div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    ลดการเติมเครื่องปรุงรสเค็ม น้ำปลา ซีอิ๊ว อาหารหมักดอง และบะหมี่กึ่งสำเร็จรูป ป้องกันโรคความดันโลหิตสูงและโรคไต
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Assessment -->
+    <div class="text-center">
+        <a href="/assessment" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl text-sm transition duration-150 shadow-md">
+            <span>ไปหน้าประเมินสุขภาพของคุณ &rarr;</span>
+        </a>
+    </div>
+
+</div>
+{% endblock %}
