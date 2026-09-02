@@ -1,1 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}HealthPingpong - ภาวะแทรกซ้อนจากโรคเรื้อรัง{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center justify-center p-3.5 bg-amber-50 rounded-2xl mb-4 shadow-2xs">
+            <span class="text-4xl">⚠️</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">การเฝ้าระวังภาวะแทรกซ้อนจากโรคเรื้อรัง</h1>
+        <p class="text-slate-600 text-base leading-relaxed">
+            โรคเบาหวานและความดันโลหิตสูงหากไม่ได้รับการควบคุมที่ดี อาจนำไปสู่ภาวะแทรกซ้อนรุนแรงต่ออวัยวะสำคัญ เรียนรู้วิธีสังเกตอาการและป้องกันล่วงหน้า
+        </p>
+    </div>
+
+    <!-- 4 Major Complications Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        
+        <!-- 1. โรคไตเรื้อรัง (Kidney Disease) -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl font-bold mb-6">
+                    🫘
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 mb-3">1. โรคไตเรื้อรัง (Chronic Kidney Disease)</h2>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                    เกิดจากหลอดเลือดฝอยในไตเสียหายจากระดับน้ำตาลและความดันสูงเรื้อรัง ทำให้ไตสูญเสียหน้าที่ในการกรองของเสีย
+                </p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2 text-sm text-slate-700">
+                    <div class="font-semibold text-slate-900">อาการเตือนที่ควรสังเกต:</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600">
+                        <li>ปัสสาวะมีฟองมาก (โปรตีนรั่ว)</li>
+                        <li>ปัสสาวะบ่อยตอนกลางคืน</li>
+                        <li>บวมบริเวณใบหน้า หนังตา หรือเท้า</li>
+                        <li>อ่อนเพลีย เบื่ออาหาร คลื่นไส้</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                <strong>การป้องกัน:</strong> ควบคุมน้ำตาลและความดันให้อยู่ในเกณฑ์ และตรวจเลือดวัดค่าการทำงานของไต (Creatinine / eGFR) อย่างน้อยปีละ 1 ครั้ง
+            </div>
+        </div>
+
+        <!-- 2. โรคหลอดเลือดหัวใจและสมอง (Cardiovascular & Stroke) -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-2xl font-bold mb-6">
+                    ❤️
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 mb-3">2. โรคหัวใจและหลอดเลือดสมอง (Stroke)</h2>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                    ความดันโลหิตสูงและไขมันในเลือดสูงทำให้หลอดเลือดแดงแข็งตัวและตีบตัน เสี่ยงต่อภาวะกล้ามเนื้อหัวใจตายหรืออัมพฤกษ์ อัมพาต
+                </p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2 text-sm text-slate-700">
+                    <div class="font-semibold text-slate-900">อาการฉุกเฉิน (BE FAST):</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600">
+                        <li><strong>B</strong>alance: เดินเซ สูญเสียการทรงตัว</li>
+                        <li><strong>E</strong>yes: ตามัว มองเห็นภาพซ้อน</li>
+                        <li><strong>F</strong>ace: หน้าเบี้ยว มุมปากตก ยิ้มไม่เท่ากัน</li>
+                        <li><strong>A</strong>rm: แขนขาอ่อนแรง ชาครึ่งซีก</li>
+                        <li><strong>S</strong>peech: พูดไม่ชัด พูดอ้อแอ้ ฟังไม่เข้าใจ</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                <strong>การป้องกัน:</strong> งดสูบบุหรี่ ควบคุมไขมันในเลือด และออกกำลังกายสม่ำเสมอ
+            </div>
+        </div>
+
+        <!-- 3. เบาหวานขึ้นตา (Diabetic Retinopathy) -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl font-bold mb-6">
+                    👁️
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 mb-3">3. โรคเบาหวานขึ้นตา (Diabetic Retinopathy)</h2>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                    ระดับน้ำตาลในเลือดสูงทำลายหลอดเลือดจอประสาทตา ทำให้เลือดและของเหลวรั่วซึม ส่งผลให้การมองเห็นพร่ามัวหรือตาบอดได้
+                </p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2 text-sm text-slate-700">
+                    <div class="font-semibold text-slate-900">อาการเตือนที่ควรสังเกต:</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600">
+                        <li>มองเห็นภาพไม่ชัด ตามัวเรื้อรัง</li>
+                        <li>มีจุดดำหรือเส้นใยลอยไปมาในตา</li>
+                        <li>เห็นแสงแฟลชหรือแสงกะพริบ</li>
+                        <li>สูญเสียการมองเห็นเฉียบพลัน</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                <strong>การป้องกัน:</strong> ตรวจตากับจักษุแพทย์อย่างน้อยปีละ 1 ครั้ง แม้ยังไม่มีอาการผิดปกติ
+            </div>
+        </div>
+
+        <!-- 4. แผลเบาหวานที่เท้า (Diabetic Foot) -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl font-bold mb-6">
+                    👣
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 mb-3">4. ภาวะปลายประสาทเสื่อมและแผลที่เท้า</h2>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                    เส้นประสาทถูกทำลายทำให้ชาปลายมือปลายเท้า สูญเสียความรู้สึกเจ็บปวด เมื่อเกิดบาดแผลจึงไม่รู้ตัวจนเกิดการติดเชื้อรุนแรง
+                </p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2 text-sm text-slate-700">
+                    <div class="font-semibold text-slate-900">วิธีดูแลและสังเกต:</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600">
+                        <li>ตรวจเท้าและซอกนิ้วเท้าทุกวัน</li>
+                        <li>สวมรองเท้าที่พอดี ไม่เดินเท้าเปล่า</li>
+                        <li>ล้างเท้าให้สะอาดและเช็ดให้แห้งเสมอ</li>
+                        <li>หากมีแผลเรื้อรัง รีบพบแพทย์ทันที</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                <strong>การป้องกัน:</strong> ควบคุมระดับน้ำตาลในเลือดให้อยู่ในเกณฑ์ที่ดีสม่ำเสมอ
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-3xl p-8 sm:p-10 text-white text-center shadow-lg">
+        <h3 class="text-2xl font-bold mb-3">ตรวจเช็กสุขภาพของคุณเพื่อป้องกันภาวะแทรกซ้อน</h3>
+        <p class="text-emerald-100 text-sm sm:text-base max-w-xl mx-auto mb-6 leading-relaxed">
+            รู้เท่าทันความเสี่ยงด้วยระบบประเมินปิงปองจราจรชีวิต 7 สี และปฏิบัติตามคำแนะนำทางการแพทย์อย่างเคร่งครัด
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="/assessment" class="px-8 py-3.5 bg-white text-emerald-800 font-bold rounded-xl hover:bg-emerald-50 transition duration-150 shadow-md">
+                ไปหน้าประเมินสุขภาพ &rarr;
+            </a>
+            <a href="/dash-diet" class="px-8 py-3.5 bg-emerald-700 border border-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-800 transition duration-150 shadow-md">
+                ดูคู่มืออาหาร DASH &rarr;
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
 
