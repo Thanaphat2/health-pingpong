@@ -1,17 +1,104 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-    <meta name="description" content="An application built with Google AI Studio." />
-    <meta property="og:title" content="My Google AI Studio App" />
-    <meta property="og:description" content="An application built with Google AI Studio." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %}หน้าแรก - HealthPingpong{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6 my-6 px-4">
+    
+    <!-- ส่วนหัวข้อต้อนรับ -->
+    <div class="text-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-2">
+        <h1 class="text-2xl font-bold text-emerald-700 flex items-center justify-center gap-2">
+            <span>🛡️</span> ยินดีต้อนรับสู่ HealthPingpong
+        </h1>
+        <p class="text-sm text-slate-600">
+            ระบบประเมินสุขภาพปิงปองจราจรชีวิต 7 สี, คู่มือโภชนาการ, และ SKT สมาธิบำบัด & ออกกำลังกายด้วยเก้าอี้
+        </p>
+    </div>
+
+    <!-- เมนูการ์ดเลือกใช้งาน -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- เมนูที่ 1: ประเมินสุขภาพ -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-center">
+                <div class="text-3xl mb-1">📋</div>
+                <h2 class="font-bold text-slate-800 text-lg">ประเมินสุขภาพ</h2>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    กรอกค่าตรวจวัดเพื่อประเมินกลุ่มสีปิงปองจราจรชีวิต 7 สี พร้อมคำแนะนำเฉพาะบุคคลทันที
+                </p>
+            </div>
+            <div class="text-center pt-2">
+                <a href="/assessment" class="inline-block bg-emerald-600 text-white font-medium px-5 py-2 rounded-xl text-xs hover:bg-emerald-700 transition shadow-sm">
+                    เริ่มประเมินสุขภาพ →
+                </a>
+            </div>
+        </div>
+
+        <!-- เมนูที่ 2: อาหาร DASH & โซเดียม -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-center">
+                <div class="text-3xl mb-1">🥗</div>
+                <h2 class="font-bold text-slate-800 text-lg">อาหาร DASH & โซเดียม</h2>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    เรียนรู้คู่มือโภชนาการ DASH ลดความดันและน้ำตาล พร้อมช่องทางค้นหาและวิเคราะห์อาหาร/เครื่องปรุงรสด้วย AI
+                </p>
+            </div>
+            <div class="text-center pt-2">
+                <a href="/dash-diet" class="inline-block bg-emerald-600 text-white font-medium px-5 py-2 rounded-xl text-xs hover:bg-emerald-700 transition shadow-sm">
+                    ดูคู่มือโภชนาการ →
+                </a>
+            </div>
+        </div>
+
+        <!-- เมนูที่ 3: ภาวะแทรกซ้อน -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-center">
+                <div class="text-3xl mb-1">⚠️</div>
+                <h2 class="font-bold text-slate-800 text-lg">ภาวะแทรกซ้อน</h2>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    ทำความเข้าใจเรื่องการเฝ้าระวังโรคเรื้อรังและภาวะแทรกซ้อนที่สำคัญ เพื่อการป้องกันทันที
+                </p>
+            </div>
+            <div class="text-center pt-2">
+                <a href="/complications" class="inline-block bg-emerald-600 text-white font-medium px-5 py-2 rounded-xl text-xs hover:bg-emerald-700 transition shadow-sm">
+                    เรียนรู้การเฝ้าระวัง →
+                </a>
+            </div>
+        </div>
+
+        <!-- เมนูที่ 4: SKT สมาธิบำบัด & ออกกำลังกายด้วยเก้าอี้ -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-center">
+                <div class="text-3xl mb-1">🧘🪑</div>
+                <h2 class="font-bold text-slate-800 text-lg">SKT สมาธิบำบัด & ออกกำลังกายด้วยเก้าอี้</h2>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    แนวทางการใช้สมาธิบำบัดเพื่อผ่อนคลาย ร่วมกับวิดีโอแนะนำท่าบริหารร่างกายด้วยเก้าอี้
+                </p>
+            </div>
+            <div class="text-center pt-2">
+                <a href="/skt" class="inline-block bg-emerald-600 text-white font-medium px-5 py-2 rounded-xl text-xs hover:bg-emerald-700 transition shadow-sm">
+                    เรียนรู้เพิ่มเติม →
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- เมนูใหม่ที่เพิ่มเข้ามา: คู่มือสำหรับผู้ป่วยความดันโลหิตสูง (แบบเต็มแถว) -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 rounded-2xl shadow-md text-white flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="space-y-1 text-center md:text-left">
+            <div class="text-2xl mb-1">📖</div>
+            <h2 class="font-bold text-lg">คู่มือสำหรับผู้ป่วยความดันโลหิตสูง</h2>
+            <p class="text-xs text-emerald-100 leading-relaxed max-w-xl">
+                คู่มือดิจิทัลฟลิปบุ๊กแนะนำการปฏิบัติตัว การดูแลสุขภาพ และการควบคุมความดันโลหิตอย่างถูกวิธี
+            </p>
+        </div>
+        <div>
+            <a href="https://heyzine.com/flip-book/6de4953119.html?fbclid=IwY2xjawUFGvlwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMXAwcEY3cURSbVJNdmRIYVJzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeny8_az08OTtPpYo6A2rmjwGnuiUJzzFmq0rPFAxxbjmOFgoRIaeYiXloLt4_aem_8fOxaOMQo9vZQo-rc_WU1A" 
+               target="_blank" 
+               class="inline-block bg-white text-emerald-800 font-bold px-6 py-3 rounded-xl text-xs hover:bg-emerald-50 transition shadow-md whitespace-nowrap">
+                เปิดอ่านคู่มือความดันฯ →
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
