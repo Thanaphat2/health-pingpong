@@ -1,0 +1,7 @@
+{
+  "name": "HealthPingpong",
+  "description": "เว็บไซต์ประเมินสุขภาพปิงปองจราจรชีวิต 7 สี ตรวจสอบระดับน้ำตาล ความดัน และภาวะแทรกซ้อน พร้อมคำแนะนำ 3 อ. 3 ลด",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
