@@ -1,1 +1,213 @@
+{% extends "base.html" %}
+{% block title %}AI วิเคราะห์คาร์บและโซเดียมอาหาร - HealthPingpong{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6 my-6 px-4">
+    
+    <!-- ส่วนหัวข้อหลัก -->
+    <div class="text-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-2">
+        <h1 class="text-2xl font-bold text-emerald-700 flex items-center justify-center gap-2">
+            <span>🤖🥗</span> AI ผู้ช่วยอัจฉริยะเปรียบเทียบโภชนาการ (อาหารและเครื่องปรุงรส)
+        </h1>
+        <p class="text-sm text-slate-600">
+            ระบบวิเคราะห์และเปรียบเทียบสัดส่วนอาหารและเครื่องปรุงรสอ้างอิงจากคู่มือมาตรฐานโภชนาการและ Gemini AI
+        </p>
+    </div>
 
+    <!-- ช่องกรอกชื่ออาหารหรือเครื่องปรุง -->
+    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+        <label class="block font-bold text-slate-800 text-sm">🍽️ พิมพ์ชื่อเมนูอาหาร เครื่องปรุงรส หรือวัตถุดิบที่ต้องการวิเคราะห์:</label>
+        <div class="flex gap-2">
+            <input type="text" id="foodInput" placeholder="เช่น เมนูทั่วไป, เกลือ, น้ำปลา, ข้าวมันไก่, ส้มตำ..." 
+                   class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+            <button onclick="analyzeFood()" id="searchBtn" class="bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-emerald-700 transition flex items-center gap-1 shadow-md">
+                <span>🔍</span> เปรียบเทียบข้อมูล
+            </button>
+        </div>
+        <p class="text-xs text-slate-400">พิมพ์ชื่ออาหารหรือเครื่องปรุงใดก็ได้ AI อัจฉริยะจะช่วยวิเคราะห์โภชนาการให้ทันที</p>
+    </div>
+
+    <!-- พื้นที่แสดงผลการวิเคราะห์แบบแบ่ง 2 ฝั่ง -->
+    <div id="resultContainer" class="space-y-4 hidden">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 text-center">
+            <span id="aiBadge" class="text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full">ผลการวิเคราะห์เปรียบเทียบ</span>
+            <h2 id="foodTitle" class="text-xl font-bold text-slate-800 mt-2"></h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- ฝั่งที่ 1: คนปกติ / ผู้รักสุขภาพ -->
+            <div class="bg-white rounded-2xl shadow-sm border-2 border-emerald-200 overflow-hidden flex flex-col justify-between">
+                <div>
+                    <div class="bg-emerald-600 text-white p-4 text-center font-bold flex items-center justify-center gap-2">
+                        <span>🟢</span> คนปกติ / ผู้รักสุขภาพ
+                    </div>
+                    <div class="p-5 space-y-3 text-sm text-slate-700">
+                        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                            <p class="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-1">ปริมาณที่แนะนำ:</p>
+                            <p id="normalAmount" class="font-semibold text-slate-800 text-base"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-700 mb-1">💡 คำแนะนำเพิ่มเติม:</p>
+                            <p id="normalDesc" class="text-slate-600 text-xs leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 px-5 py-3 border-t text-xs text-slate-500 text-center">
+                    เผาผลาญพลังงานได้ดีตามกิจกรรมปกติ
+                </div>
+            </div>
+
+            <!-- ฝั่งที่ 2: คนป่วย / ควบคุมเบาหวานและความดัน -->
+            <div class="bg-white rounded-2xl shadow-sm border-2 border-amber-300 overflow-hidden flex flex-col justify-between">
+                <div>
+                    <div class="bg-amber-600 text-white p-4 text-center font-bold flex items-center justify-center gap-2">
+                        <span>⚠️</span> คนป่วย / ควบคุมโรคเรื้อรัง
+                    </div>
+                    <div class="p-5 space-y-3 text-sm text-slate-700">
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-100">
+                            <p class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">ปริมาณจำกัดที่ทานได้:</p>
+                            <p id="patientAmount" class="font-semibold text-slate-800 text-base"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-700 mb-1">📌 ข้อควรระวังตามคู่มือ:</p>
+                            <p id="patientDesc" class="text-slate-600 text-xs leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 px-5 py-3 border-t text-xs text-slate-500 text-center">
+                    ควบคุมระดับน้ำตาลและโซเดียม (DASH Diet)
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ปุ่มกลับหน้าแรก -->
+    <div class="text-center pt-4">
+        <a href="/" class="inline-block bg-slate-200 text-slate-700 font-medium px-6 py-2 rounded-xl text-sm hover:bg-slate-300 transition">
+            ← กลับหน้าแรก
+        </a>
+    </div>
+</div>
+
+<!-- ฟังก์ชันประมวลผลผสมผสานระหว่างฐานข้อมูลท้องถิ่นและ Gemini AI อัจฉริยะ -->
+<script>
+    const foodDatabase = [
+        // เครื่องปรุงรสโซเดียมสูง
+        { keys: ["เกลือ"], normal: "ใช้ปรุงรสอาหารในปริมาณน้อย", patient: "จำกัดการใช้ให้น้อยที่สุด (เกลือ 1 ช้อนชา มีโซเดียมสูงถึง 2,000 มก.)", desc: "เกลือไม่มีคาร์โบไฮเดรต แต่มีโซเดียมสูงมาก เป็นสาเหตุหลักของโรคความดันโลหิตสูงและโรคไต" },
+        { keys: ["น้ำปลา"], normal: "ใช้ปรุงรสอาหารตามความเหมาะสม", patient: "จำกัดไม่เกิน 1 ช้อนชาต่อมื้อ (น้ำปลา 1 ช้อนโต๊ะ มีโซเดียม 1,350 มก.)", desc: "มีโซเดียมสูงมาก ผู้ป่วยความดันโลหิตสูงและโรคไตควรหลีกเลี่ยงการเติมเพิ่ม" },
+        { keys: ["ซีอิ๊ว", "ซอสถั่วเหลือง"], normal: "ใช้เหยาะหรือปรุงอาหารตามชอบ", patient: "จำกัดปริมาณแต่น้อย (ซีอิ๊ว 1 ช้อนโต๊ะ มีโซเดียม 1,190 มก.)", desc: "มีส่วนประกอบของเกลือและถั่วหมัก โซเดียมสูง ควรหลีกเลี่ยงการใช้ปริมาณมาก" },
+        { keys: ["ซุปก้อน"], normal: "ใช้ทำน้ำซุปตามสัดส่วนที่เหมาะสม", patient: "ควรหลีกเลี่ยง หรือใช้เพียงเล็กน้อย (ซุปก้อน 1 ก้อน มีโซเดียม 1,760 มก.)", desc: "โซเดียมสูงเกือบเต็มปริมาณที่แนะนำต่อวันใน 1 ก้อน ควรใช้สมุนไพรธรรมชาติแต่งกลิ่นรสแทน" },
+        { keys: ["ผงชูรส", "ผงปรุงรส"], normal: "ใช้ปรุงรสอาหารตามชอบ", patient: "จำกัดปริมาณการใช้ (ผงชูรส 1 ช้อนชา มีโซเดียม 492 มก.)", desc: "มีโซเดียมแฝง ควรระวังการใช้ในผู้ป่วยโรคไตและความดันโลหิตสูง" },
+        { keys: ["ซอสหอยนางรม"], normal: "ใช้ผัดหรือหมักอาหารตามชอบ", patient: "จำกัดเพียง 1 ช้อนโต๊ะต่อวัน (มีโซเดียม 518 มก.)", desc: "มีรสเค็มและโซเดียมค่อนข้างสูง ควรตักปรุงในปริมาณพอเหมาะ" },
+
+        // เครื่องปรุงรสหวาน / คาร์บ
+        { keys: ["น้ำตาล", "น้ำตาลทราย"], normal: "ใช้ปรุงรสอาหารได้ตามความเหมาะสม", patient: "จำกัดไม่เกิน 1 - 2 ช้อนชาต่อวัน", desc: "น้ำตาลทราย 1 ช้อนชา ให้คาร์โบไฮเดรต 4 - 5 กรัม ดูดซึมเข้าสู่กระแสเลือดไวมาก" },
+        { keys: ["น้ำผึ้ง"], normal: "ใช้ผสมเครื่องดื่มตามชอบ", patient: "จำกัดเพียง 1 ช้อนโต๊ะต่อวัน (15 กรัม)", desc: "ให้น้ำตาลฟรุกโตสสูง ทำให้น้ำตาลในเลือดพุ่งสูง" },
+        { keys: ["น้ำจิ้มไก่"], normal: "จิ้มอาหารทอดหรือย่างได้ตามชอบ", patient: "จำกัดเพียง 1 ช้อนโต๊ะต่อวัน (มีโซเดียม 385 มก. และน้ำตาลแฝง)", desc: "มีทั้งรสหวานและโซเดียม ควรตักจิ้มแต่น้อย" },
+        { keys: ["ซอสพริก", "ซอสมะเขือเทศ"], normal: "ใช้เหยาะหรือจิ้มอาหารได้ตามชอบ", patient: "จำกัดเพียง 1 ช้อนโต๊ะต่อวัน", desc: "มีน้ำตาลแฝงและโซเดียมผสมอยู่ ควรระวังการใช้ในปริมาณมาก" },
+        { keys: ["น้ำจิ้มสุกี้"], normal: "ใช้ปรุงหรือจิ้มสุกี้ตามปริมาณที่ชอบ", patient: "จำกัดเพียง 1 ช้อนโต๊ะต่อวัน", desc: "มีรสหวานเค็มจัด ควรตักจิ้มแต่น้อยเพื่อควบคุมน้ำตาลและโซเดียม" },
+
+        // ข้าวแป้ง
+        { keys: ["ข้าวขาว", "ข้าวสวย", "ข้าวซ้อมมือ"], normal: "กินได้ 2 - 3 ทัพพีต่อมื้อ ตามพลังงานที่ใช้", patient: "1 ทัพพี (น้ำหนักสุก 55 กรัม)", desc: "1 คาร์บ = คาร์โบไฮเดรต 18 กรัม เป็นแหล่งพลังงานหลัก" },
+        { keys: ["ข้าวเหนียว"], normal: "กินได้ 1.5 - 2 ทัพพีต่อมื้อ", patient: "1/2 ทัพพี (น้ำหนักสุก 35 กรัม)", desc: "ย่อยและดูดซึมเร็วกว่าข้าวสวย ผู้ป่วยเบาหวานต้องจำกัดปริมาณ" },
+        { keys: ["ข้าวต้ม", "โจ๊ก"], normal: "กินได้ 3 - 4 ทัพพี", patient: "2 ทัพพี (น้ำหนักสุก 135 - 150 กรัม)", desc: "ข้าวผ่านการต้มจนเละ ทำให้ดูดซึมไว ระวังระดับน้ำตาล" },
+        { keys: ["เส้นหมี่", "ก๋วยเตี๋ยว", "เส้นเล็ก", "วุ้นเส้น", "ขนมจีน"], normal: "กินได้ 2 ทัพพี", patient: "1 ทัพพี หรือ 1 จับ (น้ำหนักสุก 70 - 80 กรัม)", desc: "เทียบเท่า 1 คาร์บ ควรเลือกทานพร้อมผักใบเขียว" },
+        { keys: ["บะหมี่", "บะหมี่กึ่งสำเร็จรูป"], normal: "กินได้ 1-2 ก้อน", patient: "สุก 1/2 ก้อน (40 - 50 กรัม)", desc: "ระวังโซเดียมและไขมันแฝงในบะหมี่กึ่งสำเร็จรูป" },
+        { keys: ["เผือก", "มันต้ม", "มันฝรั่ง", "ฟักทอง"], normal: "กินได้ 1 - 2 ทัพพี", patient: "1 ทัพพี (น้ำหนักสุก 65 - 100 กรัม)", desc: "จัดอยู่ในกลุ่มแป้ง ควรลดปริมาณข้าวหากทานเผือกมัน" },
+        { keys: ["ข้าวโพด"], normal: "กินได้ 1 ฝักกลาง", patient: "1/2 ฝักกลาง (น้ำหนักสุก 65 กรัม)", desc: "ข้าวโพดจัดเป็นหมวดข้าวแป้ง ไม่ใช่ผัก" },
+        { keys: ["ขนมปัง", "โฮลวีต"], normal: "กินได้ 2 - 3 แผ่น", patient: "1 แผ่น (น้ำหนัก 25 กรัม)", desc: "แนะนำขนมปังโฮลวีตเพราะมีกากใยสูงกว่าขนมปังขาว" },
+        
+        // ผลไม้
+        { keys: ["กล้วยน้ำว้า", "กล้วยหอม"], normal: "กินได้ 2 - 3 ผลต่อวัน", patient: "กล้วยน้ำว้า 1 ผล หรือ กล้วยหอม 1/2 ผล", desc: "ให้พลังงานและโพแทสเซียม ทานแต่วพอดี" },
+        { keys: ["มะม่วงสุก", "มะม่วงดิบ"], normal: "กินได้ 1 ผล", patient: "มะม่วงสุก 1/2 ผลเล็ก หรือ มะม่วงดิบ 1/2 ผลกลาง", desc: "มะม่วงสุกน้ำตาลสูง ผู้ป่วยเบาหวานต้องจำกัด" },
+        { keys: ["แตงโม", "มะละกอ"], normal: "กินได้ 15 - 20 ชิ้นคำ", patient: "8 ชิ้นคำ", desc: "ดูดซึมค่อนข้างเร็ว ทานตามโควต้า" },
+        { keys: ["ส้ม", "แอปเปิ้ล"], normal: "กินได้ 2 - 3 ผล", patient: "ส้ม 2 ผลกลาง หรือ แอปเปิ้ล 1 ผลเล็ก", desc: "วิตามินและใยอาหารสูง เหมาะควบคุมเบาหวาน" },
+        { keys: ["ทุเรียน"], normal: "กินได้ 2 - 3 เม็ด", patient: "1 เม็ดเล็ก (น้ำหนักเนื้อ 50 กรัม)", desc: "พลังงานและไขมันสูงมาก หลีกเลี่ยงการทานปริมาณมาก" },
+
+        // นม
+        { keys: ["นมจืด", "นมวัว", "นมสด"], normal: "ดื่มได้ 1 - 2 แก้วต่อวัน", patient: "1 แก้ว (240 มล.) หรือ 1 กล่อง UHT (200 มล.)", desc: "ให้แคลเซียมและคาร์โบไฮเดรตแล็กโทสธรรมชาติ 1 คาร์บ" },
+        { keys: ["นมเปรี้ยว", "ยาคูลท์"], normal: "ดื่มได้ 2 ขวด", patient: "1 ขวด (80 มล.)", desc: "มีน้ำตาลค่อนข้างสูง ต้องนับรวมในโควต้าคาร์บ" },
+
+        // ขนมหวาน / เครื่องดื่ม / อาหารจานเดียว
+        { keys: ["ชานม", "กาแฟเย็น", "ชาไทย", "น้ำอัดลม"], normal: "ดื่มได้ 1 แก้ว (นานๆ ครั้ง)", patient: "ควรหลีกเลี่ยง หรือดื่มสูตรหวานน้อยที่สุด / Zero", desc: "น้ำตาลแฝงสูงมาก ทำให้น้ำตาลในเลือดพุ่งสูงอย่างรวดเร็ว" },
+        { keys: ["ข้าวหมูแดง", "ผัดซีอิ๊ว"], normal: "กินได้ 1 จานเต็ม", patient: "ทานข้าว/เส้นครึ่งจาน เน้นเนื้อสัตว์และผัก เลี่ยงน้ำราดหวานจัด", desc: "คาร์บรวมและโซเดียมสูงจากน้ำราดและเครื่องปรุง" }
+    ];
+
+    async function analyzeFood() {
+        const queryInput = document.getElementById('foodInput');
+        const query = queryInput.value.trim().toLowerCase();
+        const container = document.getElementById('resultContainer');
+        const foodTitle = document.getElementById('foodTitle');
+        const normalAmount = document.getElementById('normalAmount');
+        const normalDesc = document.getElementById('normalDesc');
+        const patientAmount = document.getElementById('patientAmount');
+        const patientDesc = document.getElementById('patientDesc');
+        const aiBadge = document.getElementById('aiBadge');
+        const searchBtn = document.getElementById('searchBtn');
+
+        if (!query) {
+            alert('กรุณาพิมพ์ชื่อเมนูอาหาร เครื่องปรุง หรือวัตถุดิบที่ต้องการวิเคราะห์ครับ');
+            return;
+        }
+
+        searchBtn.disabled = true;
+        searchBtn.innerText = "กำลังวิเคราะห์...";
+
+        container.classList.remove('hidden');
+        foodTitle.innerText = `ผลวิเคราะห์สำหรับ: "${queryInput.value.trim()}"`;
+
+        let found = foodDatabase.find(item => item.keys.some(k => query.includes(k)));
+
+        if (found) {
+            aiBadge.className = "text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full";
+            aiBadge.innerText = "ผลการวิเคราะห์จากคู่มือมาตรฐาน";
+            normalAmount.innerText = found.normal;
+            normalDesc.innerText = "คนทั่วไปสามารถรับประทานได้ตามสัดส่วนพลังงานปกติ พร้อมออกกำลังกายสม่ำเสมอ";
+            patientAmount.innerText = found.patient;
+            patientDesc.innerText = found.desc;
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = "<span>🔍</span> เปรียบเทียบข้อมูล";
+        } else {
+            aiBadge.className = "text-xs font-semibold px-3 py-1 bg-purple-100 text-purple-800 rounded-full animate-pulse";
+            aiBadge.innerText = "✨ วิเคราะห์แบบเรียลไทม์โดย Gemini AI อัจฉริยะ";
+            
+            normalAmount.innerText = "กำลังประมวลผลคำแนะนำ...";
+            normalDesc.innerText = "กำลังเรียกข้อมูลจาก AI โภชนาการ...";
+            patientAmount.innerText = "กำลังคำนวณโควต้า...";
+            patientDesc.innerText = "กำลังตรวจสอบค่าคาร์บและโซเดียม...";
+
+            try {
+                const response = await fetch('/api/analyze-food', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: queryInput.value.trim() })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    aiBadge.className = "text-xs font-semibold px-3 py-1 bg-purple-100 text-purple-800 rounded-full";
+                    aiBadge.innerText = "✨ วิเคราะห์สำเร็จโดย Gemini AI อัจฉริยะ";
+                    normalAmount.innerText = result.normal_amount || "รับประทานได้ตามความเหมาะสม";
+                    normalDesc.innerText = result.normal_desc || "รักษาสมดุลโภชนาการทั่วไป";
+                    patientAmount.innerText = result.patient_amount || "จำกัดปริมาณตามความเหมาะสม";
+                    patientDesc.innerText = result.patient_desc || "ระวังระดับน้ำตาลและโซเดียม";
+                } else {
+                    throw new Error(result.error || "AI เกิดข้อผิดพลาด");
+                }
+            } catch (error) {
+                aiBadge.className = "text-xs font-semibold px-3 py-1 bg-amber-100 text-amber-800 rounded-full";
+                aiBadge.innerText = "ระบบสำรองข้อมูล";
+                normalAmount.innerText = "รับประทานได้ตามความเหมาะสมของพลังงาน (สัดส่วน 5 หมู่)";
+                normalDesc.innerText = "รักษาสมดุลโภชนาการและควบคุมน้ำหนักตัวให้อยู่ในเกณฑ์ปกติ";
+                patientAmount.innerText = "จำกัดปริมาณเทียบเท่า 1 คาร์บ หรือควบคุมปริมาณโซเดียม";
+                patientDesc.innerText = `อ้างอิงเกณฑ์มาตรฐานโภชนาการ เพื่อความปลอดภัยและช่วยควบคุมระดับน้ำตาลและดันโลหิตให้คงที่`;
+            } finally {
+                searchBtn.disabled = false;
+                searchBtn.innerHTML = "<span>🔍</span> เปรียบเทียบข้อมูล";
+            }
+        }
+    }
+</script>
+{% endblock %}
