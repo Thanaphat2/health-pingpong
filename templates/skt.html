@@ -1,1 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6 my-6 px-4">
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-emerald-700 flex items-center justify-center gap-2">
+            <span>🧘</span> สมาธิบำบัด SKT และกิจกรรมสุขภาพ
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">แนวทางการทำสมาธิบำบัดและการออกกำลังกายเพื่อสุขภาพที่เหมาะสม</p>
+    </div>
 
+    <!-- ส่วน: VID ออกกำลังกายด้วยเก้าอี้ -->
+    <div class="bg-white p-4 rounded-2xl shadow-md border space-y-3">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <span>🪑</span> VID ออกกำลังกายด้วยเก้าอี้
+        </h2>
+        <p class="text-xs text-slate-500">วิดีโอแนะนำท่าบริหารร่างกายด้วยเก้าอี้ เหมาะสำหรับผู้สูงอายุและผู้ป่วยเพื่อเสริมสร้างความแข็งแรง</p>
+        <div class="w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div class="text-emerald-700 font-medium text-sm">
+                คลิกที่ปุ่มด้านล่างเพื่อเปิดรับชมวิดีโอ VID ออกกำลังกายด้วยเก้าอี้จาก Google Drive
+            </div>
+            <a href="https://drive.google.com/file/d/1PB2ojldPviiZxl0D1Pmbqc4LrFpBzuTm/view?usp=drive_link" 
+               target="_blank" 
+               class="inline-flex items-center gap-2 bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:bg-emerald-700 transition text-base">
+                <span>▶️</span> เปิดดู VID ออกกำลังกายด้วยเก้าอี้
+            </a>
+        </div>
+    </div>
+
+    <!-- ส่วน: VID สมาธิบำบัด -->
+    <div class="bg-white p-4 rounded-2xl shadow-md border space-y-3">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <span>🎥</span> VID สมาธิบำบัด
+        </h2>
+        <p class="text-xs text-slate-500">รับชมวิดีโอแนะนำและฝึกปฏิบัติสมาธิบำบัด SKT เพื่อการผ่อนคลายและเยียวยาสุขภาพ</p>
+        <div class="w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div class="text-emerald-700 font-medium text-sm">
+                คลิกที่ปุ่มด้านล่างเพื่อเปิดรับชมวิดีโอสมาธิบำบัด SKT จาก Google Drive
+            </div>
+            <a href="https://drive.google.com/file/d/1TC0vK8SJt57RzvY29EAZjTnDHfnn1Lcw/view?usp=drive_link" 
+               target="_blank" 
+               class="inline-flex items-center gap-2 bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:bg-emerald-700 transition text-base">
+                <span>▶️</span> เปิดดู VID สมาธิบำบัด
+            </a>
+        </div>
+    </div>
+
+    <!-- แสดงผลรูปภาพอินโฟกราฟิก SKT ทั้ง 10 หน้าจาก Google Drive (ลิงก์ถาวร) -->
+    <div class="space-y-4 pt-2">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <span>📖</span> อินโฟกราฟิกคู่มือสมาธิบำบัด SKT
+        </h2>
+        
+        <!-- หน้า 1 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/14xGELdpt8ExqJlblo9PaSN21V7hfPOXx" alt="สมาธิบำบัด SKT หน้า 1" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 2 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1PydHJv6k3kR0pzF1GIl-J--1WOPXmPeZ" alt="สมาธิบำบัด SKT หน้า 2" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 3 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1jxn3CcOACnCQl--v0LbRU8D2OWBx7B8n" alt="สมาธิบำบัด SKT หน้า 3" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 4 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1Bm0pcTZ0PHX25zBq12eu98Fu0huSD_OE" alt="สมาธิบำบัด SKT หน้า 4" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 5 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1qLKTB0O311i40gD4oeNPWYTQwH7cSGFN" alt="สมาธิบำบัด SKT หน้า 5" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 6 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1oxFaNS1Bpet0vy08dSg2OOaG1uK7YjOD" alt="สมาธิบำบัด SKT หน้า 6" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 7 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1oPzQGs5yxa1WKI28B10jm72yDP8VJQKG" alt="สมาธิบำบัด SKT หน้า 7" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 8 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/15c5_LM_koW-O6E9paABSNqzRR_iNWUga" alt="สมาธิบำบัด SKT หน้า 8" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 9 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1yw9wGyxVFZtLVge9Gyfp2EXaihLpEamS" alt="สมาธิบำบัด SKT หน้า 9" class="w-full h-auto rounded-xl">
+        </div>
+        <!-- หน้า 10 -->
+        <div class="bg-white p-2 rounded-2xl shadow-md border overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/d/1aGuvnHEtFN0eIdl8n8doCxQ8gMUkP_NU" alt="สมาธิบำบัด SKT หน้า 10" class="w-full h-auto rounded-xl">
+        </div>
+    </div>
+
+    <div class="text-center mt-6">
+        <a href="/" class="inline-block bg-slate-200 text-slate-700 font-medium px-6 py-2.5 rounded-xl shadow hover:bg-slate-300 transition">
+            ← กลับไปหน้าแรก
+        </a>
+    </div>
+</div>
+{% endblock %}
