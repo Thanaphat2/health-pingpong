@@ -208,7 +208,7 @@
         { keys: ["คุกกี้เนย"], normal: "ทานนานๆ ครั้ง", patient: "จำกัด 3 ชิ้น (0.7 คาร์บ)", desc: "ไขมันและน้ำตาลสูง" },
 
         // --- 6. หมวดเครื่องดื่ม ---
-        { keys: ["กาแฟเย็น"], normal: "ดื่มนานๆ ครั้ง", patient: "จำกัด 1 แก้ว 480 มล. (3 คาร์บ)", desc: "ใส่นมข้นหวานและน้ำตาลสูงมาก" },
+        { keys: ["กาแฟเย็น"], normal: "ดื่มนานๆ ครั้ง", patient: "จำกัด 1 แก้ว 480 มล. (3 คาร์บ)", desc: "ใส่น้ำข้นหวานและน้ำตาลสูงมาก" },
         { keys: ["ชานมเย็น"], normal: "ดื่มนานๆ ครั้ง", patient: "จำกัด 1 แก้ว 480 มล. (2.3 คาร์บ)", desc: "มีน้ำตาลและครีมเทียมสูง" },
         { keys: ["ชาดำเย็น"], normal: "ดื่มนานๆ ครั้ง", patient: "จำกัด 1 แก้ว 240 มล. (1.5 คาร์บ)", desc: "ใส่น้ำตาลทรายปรุงรส" },
         { keys: ["น้ำอัดลม", "โคล่า"], normal: "หลีกเลี่ยงหรือดื่มสูตร Zero", patient: "จำกัด 1 กระป๋อง 245 มล. (1.7 คาร์บ)", desc: "น้ำตาลสูง ทำให้น้ำตาลในเลือดพุ่งเร็ว" },
@@ -288,7 +288,7 @@
             
             normalAmount.innerText = "กำลังประมวลผลคำแนะนำ...";
             normalDesc.innerText = "กำลังเรียกข้อมูลจาก AI โภชนาการ...";
-            patientAmount.innerText = "กำลังคำนวณโควต้า...";
+            patientAmount.innerText = "กำลังตรวจสอบความถูกต้อง...";
             patientDesc.innerText = "กำลังตรวจสอบค่าคาร์บและโซเดียม...";
 
             try {
@@ -303,20 +303,20 @@
                 if (response.ok) {
                     aiBadge.className = "text-xs font-semibold px-3 py-1 bg-purple-100 text-purple-800 rounded-full";
                     aiBadge.innerText = "✨ วิเคราะห์สำเร็จโดย Gemini AI อัจฉริยะ";
-                    normalAmount.innerText = result.normal_amount || "รับประทานได้ตามความเหมาะสม";
-                    normalDesc.innerText = result.normal_desc || "รักษาสมดุลโภชนาการทั่วไป";
-                    patientAmount.innerText = result.patient_amount || "จำกัดปริมาณตามความเหมาะสม";
-                    patientDesc.innerText = result.patient_desc || "ระวังระดับน้ำตาลและโซเดียม";
+                    normalAmount.innerText = result.normal_amount || "ไม่มีข้อมูลในฐานข้อมูลโภชนาการ";
+                    normalDesc.innerText = result.normal_desc || "ไม่พบข้อมูลที่ถูกต้องตามหลักโภชนาการ";
+                    patientAmount.innerText = result.patient_amount || "ไม่มีข้อมูล";
+                    patientDesc.innerText = result.patient_desc || "กรุณาตรวจสอบชื่อเมนูอาหารให้ถูกต้อง";
                 } else {
                     throw new Error(result.error || "AI เกิดข้อผิดพลาด");
                 }
             } catch (error) {
-                aiBadge.className = "text-xs font-semibold px-3 py-1 bg-amber-100 text-amber-800 rounded-full";
-                aiBadge.innerText = "ระบบสำรองข้อมูล";
-                normalAmount.innerText = "รับประทานได้ตามความเหมาะสมของพลังงาน (สัดส่วน 5 หมู่)";
-                normalDesc.innerText = "รักษาสมดุลโภชนาการและควบคุมน้ำหนักตัวให้อยู่ในเกณฑ์ปกติ";
-                patientAmount.innerText = "จำกัดปริมาณเทียบเท่า 1 คาร์บ หรือควบคุมปริมาณโซเดียม";
-                patientDesc.innerText = `อ้างอิงเกณฑ์มาตรฐานโภชนาการ เพื่อความปลอดภัยและช่วยควบคุมระดับน้ำตาลและดันโลหิตให้คงที่`;
+                aiBadge.className = "text-xs font-semibold px-3 py-1 bg-rose-100 text-rose-800 rounded-full";
+                aiBadge.innerText = "ไม่พบข้อมูลในระบบ";
+                normalAmount.innerText = "❌ ไม่มีข้อมูลในฐานข้อมูลโภชนาการ";
+                normalDesc.innerText = "คำค้นหานี้ไม่ถูกต้อง หรือไม่มีรายการอาหารนี้ในระบบมาตรฐาน";
+                patientAmount.innerText = "❌ ไม่มีข้อมูลในฐานข้อมูล";
+                patientDesc.innerText = "กรุณาตรวจสอบคำสะกด หรือพิมพ์ค้นหาชื่อเมนูอาหาร เครื่องปรุง หรือวัตถุดิบอื่นที่ถูกต้อง";
             } finally {
                 searchBtn.disabled = false;
                 searchBtn.innerHTML = "<span>🔍</span> เปรียบเทียบข้อมูล";
