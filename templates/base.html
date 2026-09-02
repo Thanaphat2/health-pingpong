@@ -1,1 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HealthPingpong{% endblock %}</title>
+    <!-- โหลด Tailwind CSS แบบสมบูรณ์ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Navbar ด้านบน -->
+    <nav class="bg-emerald-700 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold flex items-center gap-2">
+                <span>🛡️</span> HealthPingpong
+            </a>
+            <div class="space-x-4 text-sm md:text-base">
+                <a href="/" class="hover:underline">หน้าแรก</a>
+                <a href="/skt" class="hover:underline">SKT สมาธิบำบัด & ออกกำลังกายด้วยเก้าอี้</a>
+            </div>
+        </div>
+    </nav>
 
+    <!-- เนื้อหาหลักของแต่ละหน้า -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer ด้านล่าง -->
+    <footer class="bg-slate-800 text-white text-center py-4 text-sm mt-auto">
+        <p>ระบบประเมินสุขภาพปิงปองจราจรชีวิต 7 สี & SKT สมาธิบำบัด & ออกกำลังกายด้วยเก้าอี้</p>
+    </footer>
+</body>
+</html>
