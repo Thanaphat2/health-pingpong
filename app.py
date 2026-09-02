@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from google import genai
+import json
 
 app = Flask(__name__)
 app.secret_key = 'health_pingpong_secret_key'
@@ -195,6 +196,55 @@ def api_get_ai_advice():
         return jsonify({"advice": response.text})
     except Exception as e:
         return jsonify({"advice": f"เกิดข้อผิดพลาดในการเรียก AI: {str(e)}"})
+
+
+@app.route('/api/analyze-food', methods=['POST'])
+def analyze_food():
+    data = request.get_json()
+    query = data.get('query', '').strip()
+
+    if not client:
+        return jsonify({"error": "ระบบ AI ไม่พร้อมใช้งาน"}), 500
+
+    try:
+        prompt = f"""
+        คุณคือผู้เชี่ยวชาญด้านโภชนาการและการควบคุมโรคเรื้อรัง ให้วิเคราะห์อาหารหรือเครื่องปรุงรส: "{query}"
+
+        กฎเหล็กที่ต้องปฏิบัติอย่างเคร่งครัด:
+        1. ห้ามใช้คำว่า "หน่วยบริโภค" หรือ "ส่วน" เด็ดขาด ให้ใช้หน่วยที่เป็นรูปธรรมจับต้องได้เท่านั้น
+        2. ถ้าเป็นผลไม้ที่เป็นผลเดี่ยวๆ (เช่น กล้วย, ส้ม, แอปเปิ้ล, มะม่วง, ลิ้นจี่) ต้องระบุเป็น "จำนวนผล" ชัดเจน (เช่น 1 ผล, 2 ผล หรือ 1/2 ผล)
+        3. ถ้าเป็นผลไม้พวงหรือผลย่อยๆ ขนาดเล็ก (เช่น องุ่น, ลำไย) หรือเนื้อผลไม้ ให้ระบุเป็น "กรัม" หรือ "ขีด" (เช่น 150 กรัม หรือ 1.5 ขีด)
+        4. ถ้าเป็นอาหารคาว เนื้อสัตว์ เมนูปิ้งย่าง (เช่น หมูย่าง ไก่ย่าง) ให้ระบุเป็น "กรัม", "ขีด", "ชิ้น" หรือ "จาน" ที่เห็นภาพชัดเจน ห้ามใช้คำว่าผลเด็ดขาด
+        5. ถ้าเป็นเครื่องปรุงรส ให้ระบุเป็น "ช้อนโต๊ะ" หรือ "ช้อนชา"
+
+        คุณต้องตอบกลับมาในรูปแบบ JSON ที่มีคีย์ (Keys) ตรงตามนี้เท่านั้น ห้ามใส่เครื่องหมายอื่นครอบโค้ด JSON:
+        {{
+            "normal_amount": "ระบุปริมาณที่แนะนำสำหรับคนปกติเป็นจำนวนผล, กรัม, ขีด, ชิ้น หรือจาน ที่เห็นภาพชัดเจนตรงกับประเภทอาหาร",
+            "normal_desc": "คำแนะนำเพิ่มเติมสั้นๆ สำหรับคนปกติ",
+            "patient_amount": "ระบุปริมาณจำกัดที่ทานได้สำหรับผู้ป่วยโรคเรื้อรังเป็นจำนวนผล, กรัม, ขีด, ชิ้น หรือจานที่ชัดเจน ห้ามใช้คำว่าหน่วยบริโภคหรือส่วน",
+            "patient_desc": "ข้อควรระวังตามหลัก DASH Diet และปริมาณโซเดียมหรือไขมัน/น้ำตาล"
+        }}
+        """
+
+        response = client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
+        text_response = response.text.strip()
+
+        if text_response.startswith("```json"):
+            text_response = text_response[7:]
+        if text_response.endswith("```"):
+            text_response = text_response[:-3]
+
+        result_json = json.loads(text_response.strip())
+        return jsonify(result_json)
+
+    except Exception as e:
+        # ปรับค่าสำรองกลางๆ ที่ปลอดภัยสำหรับทุกเมนู (ไม่ใช้คำว่า 'ผล' แล้ว)
+        return jsonify({
+            "normal_amount": "150 - 200 กรัม หรือ 1 - 2 จาน ตามสัดส่วนพลังงานปกติ",
+            "normal_desc": "รับประทานในปริมาณที่พอเหมาะและออกกำลังกายสม่ำเสมอ",
+            "patient_amount": "จำกัดปริมาณไม่เกิน 100 กรัม หรือควบคุมสัดส่วนแต่น้อย",
+            "patient_desc": "ควรควบคุมปริมาณไขมัน โซเดียม และน้ำตาลตามหลัก DASH Diet"
+        })
 
 
 @app.route('/dash-diet')
