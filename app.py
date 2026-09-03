@@ -13,14 +13,23 @@ except Exception:
     client = None
 
 
-def evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, complication):
-    """ประเมินสุขภาพตามเกณฑ์ปิงปอง 7 สี พร้อมคำแนะนำที่ละเอียดและครบถ้วน"""
+def evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, complication, underlying_diseases=None):
+    """ประเมินสุขภาพตามเกณฑ์ปิงปอง 7 สี (อ้างอิงตามอินโฟกราฟิกทางการ) พร้อมรองรับผู้มีโรคประจำตัว"""
+    if underlying_diseases is None:
+        underlying_diseases = []
+
     try:
-        if complication == "yes":
+        # ตรวจสอบว่ามีโรคประจำตัวเรื้อรังหรือไม่ (เบาหวาน, ความดัน, ไขมัน, ไต, หัวใจ)
+        has_disease = any(
+            d in underlying_diseases for d in ["diabetes", "hypertension", "kidney", "heart", "dyslipidemia"])
+
+        # 1. สีดำ: โรคแทรกซ้อน (น้ำตาล 125-154, ความดัน 160-179/100-109 และมีภาวะแทรกซ้อน) หรือเลือก complication เป็น yes
+        if complication == "yes" or (
+                (125 <= sugar <= 154) and (160 <= sys <= 179 or 100 <= dia <= 109) and complication == "yes"):
             return {
                 "level": "โรคแทรกซ้อน (สีดำ)",
                 "color_name": "โรคแทรกซ้อน",
-                "color_code": "black",
+                "color_code": "#1c1917",  # สีดำ สไตล์ Tailwind stone-900
                 "bg_color": "bg-stone-900 text-white",
                 "badge_color": "bg-neutral-900 text-white border border-neutral-700",
                 "border_color": "border-black",
@@ -31,11 +40,13 @@ def evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, compli
                 ],
                 "action": "พบแพทย์ด่วนที่สุด (Urgent Medical Attention)"
             }
+
+        # 2. สีแดง: วิกฤต (น้ำตาล >= 183 หรือ ความดัน >= 180/110)
         elif sugar >= 183 or sys >= 180 or dia >= 110:
             return {
                 "level": "วิกฤต (สีแดง)",
                 "color_name": "วิกฤต",
-                "color_code": "red",
+                "color_code": "#dc2626",  # สีแดง (red-600)
                 "bg_color": "bg-red-600 text-white",
                 "badge_color": "bg-red-700 text-white",
                 "border_color": "border-red-600",
@@ -47,11 +58,13 @@ def evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, compli
                 ],
                 "action": "พบแพทย์ทันที / ห้องฉุกเฉิน"
             }
+
+        # 3. สีส้ม: อันตราย (น้ำตาล 155-182 หรือ ความดัน 160-179/100-109)
         elif (155 <= sugar <= 182) or (160 <= sys <= 179) or (100 <= dia <= 109):
             return {
                 "level": "อันตราย (สีส้ม)",
                 "color_name": "อันตราย",
-                "color_code": "orange",
+                "color_code": "#f97316",  # สีส้ม (orange-500)
                 "bg_color": "bg-orange-500 text-white",
                 "badge_color": "bg-orange-600 text-white",
                 "border_color": "border-orange-500",
@@ -63,11 +76,13 @@ def evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, compli
                 ],
                 "action": "พบแพทย์ภายใน 1-2 วัน"
             }
+
+        # 4. สีเหลือง: เฝ้าระวัง (น้ำตาล 125-154 หรือ ความดัน 140-159/90-99)
         elif (125 <= sugar <= 154) or (140 <= sys <= 159) or (90 <= dia <= 99):
             return {
                 "level": "เฝ้าระวัง (สีเหลือง)",
                 "color_name": "เฝ้าระวัง",
-                "color_code": "yellow",
+                "color_code": "#facc15",  # สีเหลือง (yellow-400)
                 "bg_color": "bg-yellow-400 text-slate-900",
                 "badge_color": "bg-yellow-400 text-gray-900",
                 "border_color": "border-yellow-400",
@@ -79,52 +94,99 @@ def evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, compli
                 ],
                 "action": "พบแพทย์ตามนัด / ปรับพฤติกรรม"
             }
-        elif sugar < 125 and sys < 139 and dia < 89 and (smoke == "no"):
-            return {
-                "level": "คุมได้ดี (สีเขียวเข้ม)",
-                "color_name": "คุมได้ดี",
-                "color_code": "dark-green",
-                "bg_color": "bg-emerald-700 text-white",
-                "badge_color": "bg-emerald-800 text-white",
-                "border_color": "border-emerald-700",
-                "description": "อยู่ในเกณฑ์ที่สามารถควบคุมระดับน้ำตาลและความดันได้ดี",
-                "advice": [
-                    "1) รักษาพฤติกรรมสุขภาพที่ดีตามหลัก 3 อ. 3 ลด นี้ไว้อย่างต่อเนื่อง",
-                    "2) รับประทานอาหารที่มีประโยชน์ตามหลัก DASH Diet และมาพบแพทย์ตามนัดสม่ำเสมอ"
-                ],
-                "action": "รักษาพฤติกรรมต่อเนื่อง / พบแพทย์ตามนัด"
-            }
+
+        # 5. กลุ่มควบคุมได้ดีหรือปกติ (น้ำตาล < 125 และ ความดัน < 139/89)
+        elif sugar < 125 and sys < 139 and dia < 89:
+            # ถ้ามีโรคประจำตัว แต่คุมค่าได้ตามเกณฑ์ -> ได้ "สีเขียวเข้ม (คุมได้ดี)"
+            if has_disease or sugar >= 100 or sys >= 120 or dia >= 80:
+                return {
+                    "level": "คุมได้ดี (สีเขียวเข้ม)",
+                    "color_name": "คุมได้ดี",
+                    "color_code": "#047857",  # สีเขียวเข้ม (emerald-700)
+                    "bg_color": "bg-emerald-700 text-white",
+                    "badge_color": "bg-emerald-800 text-white",
+                    "border_color": "border-emerald-700",
+                    "description": "มีโรคประจำตัว แต่สามารถควบคุมระดับน้ำตาลและความดันให้อยู่ในเกณฑ์ได้ดี",
+                    "advice": [
+                        "1) 3 อ. 3 ลด และรับประทานยาต่อเนื่องตามแพทย์สั่ง",
+                        "2) พบแพทย์ทุก 2-3 เดือน และลดการบริโภคน้ำตาล/อาหารมันเค็ม"
+                    ],
+                    "action": "รักษาพฤติกรรมต่อเนื่อง / พบแพทย์ตามนัด"
+                }
+            else:
+                # ถ้าไม่มีโรคประจำตัว และค่าต่ำกว่าเกณฑ์ปกติจริง ๆ (น้ำตาล < 100 และ ความดัน < 120/80) -> ได้ "สีขาว (ปกติ)"
+                return {
+                    "level": "ปกติ (สีขาว)",
+                    "color_name": "ปกติ",
+                    "color_code": "#10b981",  # สีเขียว/ขาวสะอาดตา (emerald-500)
+                    "bg_color": "bg-emerald-500 text-white",
+                    "badge_color": "bg-gray-100 text-gray-800",
+                    "border_color": "border-gray-300",
+                    "description": "ระดับน้ำตาลและแรงดันโลหิตอยู่ในเกณฑ์ปกติ สุขภาพดีเยี่ยม",
+                    "advice": [
+                        "1) คงพฤติกรรม 3 อ. 3 ลด (ทานผักผลไม้ ออกกำลังกายสม่ำเสมอ อารมณ์แจ่มใส งดบุหรี่และสุรา)",
+                        "2) ตรวจสุขภาพวัดความดันและน้ำตาลซ้ำทุก 1 ปีเพื่อรักษาสุขภาพให้แข็งแรงระยะยาว"
+                    ],
+                    "action": "รักษาสุขภาพอย่างต่อเนื่อง"
+                }
+
+        # 6. สีเขียวอ่อน: เสี่ยง (น้ำตาล 100-125 หรือ ความดัน 120-139/80-89 หรือมีพฤติกรรมสูบบุหรี่/ดื่มสุรา)
         elif (100 <= sugar <= 125) or (120 <= sys <= 139) or (80 <= dia <= 89) or (smoke == "yes") or (
                 alcohol == "yes"):
-            return {
-                "level": "เสี่ยง (สีเขียวอ่อน)",
-                "color_name": "เสี่ยง",
-                "color_code": "light-green",
-                "bg_color": "bg-sky-400 text-white",
-                "badge_color": "bg-emerald-200 text-emerald-900",
-                "border_color": "border-emerald-300",
-                "description": "อยู่ในกลุ่มเสี่ยงเริ่มสูง (Pre-hypertension / Pre-diabetes หรือมีพฤติกรรมเสี่ยง)",
-                "advice": [
-                    "1) ลด ละ เลิกบุหรี่และเครื่องดื่มแอลกอฮอล์อย่างเด็ดขาดเพื่อลดภาระหลอดเลือด",
-                    "2) เพิ่มการออกกำลังกายแบบแอโรบิก (เช่น เดินเร็ว) ครั้งละ 30 นาที สัปดาห์ละ 3-5 วัน และควบคุมน้ำหนักตัว",
-                    "3) วัดความดันและตรวจระดับน้ำตาลซ้ำทุก 1-3 เดือนเพื่อประเมินความเปลี่ยนแปลง"
-                ],
-                "action": "ปรับพฤติกรรม / ตรวจสุขภาพประจำปี"
-            }
+            if has_disease:
+                return {
+                    "level": "คุมได้ดี (สีเขียวเข้ม)",
+                    "color_name": "คุมได้ดี",
+                    "color_code": "#047857",
+                    "bg_color": "bg-emerald-700 text-white",
+                    "badge_color": "bg-emerald-800 text-white",
+                    "border_color": "border-emerald-700",
+                    "description": "มีโรคประจำตัว ควบคุมระดับน้ำตาลและความดันตามคำแนะนำแพทย์",
+                    "advice": [
+                        "1) 3 อ. 3 ลด และรับประทานยาต่อเนื่องตามแพทย์สั่ง",
+                        "2) พบแพทย์ทุก 2-3 เดือนเพื่อติดตามอาการ"
+                    ],
+                    "action": "รักษาพฤติกรรมต่อเนื่อง / พบแพทย์ตามนัด"
+                }
+            else:
+                return {
+                    "level": "เสี่ยง (สีเขียวอ่อน)",
+                    "color_name": "เสี่ยง",
+                    "color_code": "#38bdf8",  # สีฟ้า/เขียวอ่อน (sky-400)
+                    "bg_color": "bg-sky-400 text-white",
+                    "badge_color": "bg-emerald-200 text-emerald-900",
+                    "border_color": "border-emerald-300",
+                    "description": "อยู่ในกลุ่มเสี่ยงเริ่มสูง (Pre-hypertension / Pre-diabetes หรือมีพฤติกรรมเสี่ยง)",
+                    "advice": [
+                        "1) ลด ละ เลิกบุหรี่และเครื่องดื่มแอลกอฮอล์อย่างเด็ดขาดเพื่อลดภาระหลอดเลือด",
+                        "2) เพิ่มการออกกำลังกายแบบแอโรบิก (เช่น เดินเร็ว) ครั้งละ 30 นาที สัปดาห์ละ 3-5 วัน และควบคุมน้ำหนักตัว",
+                        "3) วัดความดันและตรวจระดับน้ำตาลซ้ำทุก 1-3 เดือนเพื่อประเมินความเปลี่ยนแปลง"
+                    ],
+                    "action": "ปรับพฤติกรรม / ตรวจสุขภาพประจำปี"
+                }
         else:
+            if has_disease:
+                return {
+                    "level": "คุมได้ดี (สีเขียวเข้ม)",
+                    "color_name": "คุมได้ดี",
+                    "color_code": "#047857",
+                    "bg_color": "bg-emerald-700 text-white",
+                    "badge_color": "bg-emerald-800 text-white",
+                    "border_color": "border-emerald-700",
+                    "description": "มีโรคประจำตัว ติดตามอาการและพบแพทย์สม่ำเสมอ",
+                    "advice": ["ปฏิบัติตามคำแนะนำของแพทย์อย่างเคร่งครัด"],
+                    "action": "พบแพทย์ตามนัด"
+                }
             return {
                 "level": "ปกติ (สีขาว)",
                 "color_name": "ปกติ",
-                "color_code": "white",
+                "color_code": "#10b981",
                 "bg_color": "bg-emerald-500 text-white",
                 "badge_color": "bg-gray-100 text-gray-800",
                 "border_color": "border-gray-300",
-                "description": "ระดับน้ำตาลและแรงดันโลหิตอยู่ในเกณฑ์ปกติ สุขภาพดีเยี่ยม",
-                "advice": [
-                    "1) คงพฤติกรรม 3 อ. 3 ลด (ทานผักผลไม้ ออกกำลังกายสม่ำเสมอ อารมณ์แจ่มใส งดบุหรี่และสุรา)",
-                    "2) ตรวจสุขภาพวัดความดันและน้ำตาลซ้ำทุก 1 ปีเพื่อรักษาสุขภาพให้แข็งแรงระยะยาว"
-                ],
-                "action": "รักษาสุขภาพอย่างต่อเนื่อง"
+                "description": "ระดับน้ำตาลและแรงดันโลหิตอยู่ในเกณฑ์ปกติ",
+                "advice": ["รักษาสุขภาพอย่างต่อเนื่อง"],
+                "action": "รักษาสุขภาพ"
             }
     except Exception:
         return None
@@ -150,19 +212,47 @@ def assessment():
             exercise = request.form.get('exercise', 'moderate')
             complication = request.form.get('complication', 'no')
 
+            # รับค่าโรคประจำตัวจากฟอร์มแบบ Checkbox หลายตัวเลือก
+            underlying_diseases = request.form.getlist('underlying_disease')
+
             form_data = {
                 'name': name, 'sugar': sugar, 'sys': sys, 'dia': dia,
-                'smoke': smoke, 'alcohol': alcohol, 'exercise': exercise, 'complication': complication
+                'smoke': smoke, 'alcohol': alcohol, 'exercise': exercise,
+                'complication': complication, 'underlying_disease': underlying_diseases
             }
 
-            evaluation = evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, complication)
+            # ประเมินผลสุขภาพโดยส่งตัวแปรโรคประจำตัวเข้าไปด้วย
+            evaluation = evaluate_pingpong_7_colors(sugar, sys, dia, smoke, alcohol, exercise, complication,
+                                                    underlying_diseases)
+
+            # เรียก AI แนะนำเพิ่มเติม
+            ai_advice = ""
+            if client and evaluation:
+                try:
+                    prompt = f"""
+                    คุณคือพยาบาลผู้เชี่ยวชาญด้านสุขภาพดิจิทัล ให้คำแนะนำตามหลักเกณฑ์ปิงปองจราจรชีวิต 7 สี และหลักโภชนาการ DASH Diet
+                    ข้อมูลผู้รับการประเมิน:
+                    - ชื่อ: {name}
+                    - น้ำตาล: {sugar} mg/dl, ความดัน: {sys}/{dia} mmHg
+                    - พฤติกรรม: สูบบุหรี่ ({smoke}), ดื่มสุรา ({alcohol})
+                    - โรคประจำตัว: {', '.join(underlying_diseases) if underlying_diseases else 'ไม่มี'}
+                    - กลุ่มสีประเมิน: {evaluation['color_name']}
+                    ให้เขียนคำแนะนำสั้นๆ กระชับ เป็นกันเอง ภาษาไทยอบอุ่น เป็นกำลังใจ เน้นย้ำการปฏิบัติตัว 3 อ. 3 ลด และการมาพบแพทย์ตามนัด
+                    """
+                    response = client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
+                    ai_advice = response.text
+                except Exception as e:
+                    ai_advice = f"ระบบ AI ไม่สามารถสร้างคำแนะนำได้ในขณะนี้"
+
             if evaluation:
                 result = {
                     "name": name, "sugar": sugar, "sys": sys, "dia": dia,
                     "smoke": smoke, "alcohol": alcohol, "complication": complication,
+                    "underlying_disease": underlying_diseases,
                     "smoke_text": "สูบบุหรี่" if smoke == "yes" else "ไม่สูบ",
                     "alcohol_text": "ดื่มสุรา" if alcohol == "yes" else "ไม่ดื่ม",
                     "evaluation": evaluation,
+                    "ai_advice": ai_advice,
                     "level": evaluation['level'], "description": evaluation['description'],
                     "bg_color": evaluation['bg_color'], "border_color": evaluation['border_color'],
                     "badge_color": evaluation['badge_color'], "advice": evaluation['advice'],
@@ -176,28 +266,6 @@ def assessment():
     return render_template('assessment.html', result=result, form_data=form_data)
 
 
-@app.route('/api/get-ai-advice', methods=['POST'])
-def api_get_ai_advice():
-    data = request.get_json()
-    if not client:
-        return jsonify({"advice": "ระบบ AI ไม่พร้อมใช้งาน"})
-
-    try:
-        prompt = f"""
-        คุณคือพยาบาลผู้เชี่ยวชาญด้านสุขภาพดิจิทัล ให้คำแนะนำตามหลักเกณฑ์ปิงปองจราจรชีวิต 7 สี และหลักโภชนาการ DASH Diet
-        ข้อมูลผู้รับการประเมิน:
-        - ชื่อ: {data.get('name')}
-        - น้ำตาล: {data.get('sugar')} mg/dl, ความดัน: {data.get('sys')}/{data.get('dia')} mmHg
-        - พฤติกรรม: สูบบุหรี่ ({data.get('smoke')}), ดื่มสุรา ({data.get('alcohol')})
-        - กลุ่มสีประเมิน: {data.get('color_name')}
-        ให้เขียนคำแนะนำสั้นๆ กระชับ เป็นกันเอง ภาษาไทยอบอุ่น เป็นกำลังใจ เน้นย้ำการปฏิบัติตัว 3 อ. 3 ลด และการมาพบแพทย์ตามนัด
-        """
-        response = client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
-        return jsonify({"advice": response.text})
-    except Exception as e:
-        return jsonify({"advice": f"เกิดข้อผิดพลาดในการเรียก AI: {str(e)}"})
-
-
 @app.route('/api/analyze-food', methods=['POST'])
 def analyze_food():
     data = request.get_json()
@@ -208,18 +276,21 @@ def analyze_food():
 
     try:
         prompt = f"""
-        คุณคือผู้เชี่ยวชาญด้านโภชนาการและการควบคุมโรคเรื้อรัง ให้ตรวจสอบคำค้นหา: "{query}"
-        
-        กฎการทำงานสำคัญมาก:
-        1. หากคำค้นหานี้ **ไม่ใช่ชื่ออาหาร เครื่องปรุงรส ผัก ผลไม้ ข้าว แป้ง หรือเครื่องดื่ม** (เช่น เป็นตัวเลขมั่วๆ ข้อความขยะ คำหยาบ คำแปลกปลอมที่ไม่มีตัวตน หรือสิ่งของที่ไม่ใช่อาหาร) ให้ตอบกลับใน JSON โดยระบุว่าไม่มีข้อมูลทันที ห้ามแต่งเรื่องขึ้นมาเด็ดขาด!
-        2. หากเป็นอาหารหรือวัตถุดิบจริง ให้ใช้หน่วยวัดที่ถูกต้องตามประเภท (ผลไม้ใช้ "ผล" หรือ "ลูก", ข้าวใช้ "ทัพพี", เนื้อสัตว์ใช้ "กรัม" หรือ "ชิ้น", เครื่องปรุงใช้ "ช้อนโต๊ะ" หรือ "ช้อนชา") ห้ามใช้คำว่า "หน่วยบริโภค" หรือ "ส่วน" เด็ดขาด
-        
+        คุณคือผู้เชี่ยวชาญด้านโภชนาการและการควบคุมโรคเรื้อรัง ให้วิเคราะห์อาหารหรือเครื่องปรุงรส: "{query}"
+
+        อ่านกฎการบังคับใช้หน่วยวัดตามประเภทอาหารด้านล่างนี้แล้วปฏิบัติตามอย่างเคร่งครัด 100% ห้ามสลับหมวดเด็ดขาด:
+        1. หากเป็น "ผลไม้ผลเดี่ยว" (เช่น กล้วย, ส้ม, แอปเปิ้ล, มะม่วง, ฝรั่ง) -> บังคับใช้หน่วยเป็น **"ผล"** หรือ **"ลูก"** เท่านั้น
+        2. หากเป็น "ผลไม้พวง / ผลไม้ลูกเล็กๆ ที่นับเป็นเม็ดไม่ได้" (เช่น องุ่น, ลำไย, เบอร์รี่) -> บังคับใช้หน่วยเป็น **"กรัม"** หรือ **"ขีด"** เท่านั้น ห้ามใช้ผลหรือทัพพีเด็ดขาด
+        3. หากเป็น "ข้าว แป้ง เส้น ขนมจีน" (เช่น ข้าวสวย, ข้าวเหนียว, เส้นหมี่, โจ๊ก) -> บังคับใช้หน่วยเป็น **"ทัพพี"** เท่านั้น ห้ามใช้ผลหรือจาน
+        4. หากเป็น "เนื้อสัตว์ เมนูปิ้ง/ย่าง/ทอด" (เช่น หมูย่าง, หมูทอด, ไก่ทอด, ปลา) -> บังคับใช้หน่วยเป็น **"กรัม"**, **"ขีด"** หรือ **"ชิ้น"** เท่านั้น
+        5. หากเป็น "เครื่องปรุงรส" (เช่น น้ำปลา, เกลือ, น้ำตาล) -> บังคับใช้หน่วยเป็น **"ช้อนชา"** หรือ **"ช้อนโต๊ะ"** เท่านั้น
+
         คุณต้องตอบกลับมาในรูปแบบ JSON ที่มีคีย์ (Keys) ตรงตามนี้เท่านั้น ห้ามใส่เครื่องหมายอื่นครอบโค้ด JSON:
         {{
-            "normal_amount": "หากเป็นอาหารจริงให้ระบุปริมาณที่แนะนำ หรือหากเป็นคำแปลกปลอมให้ระบุว่า 'ไม่มีข้อมูลในฐานข้อมูลโภชนาการ'",
-            "normal_desc": "คำแนะนำเพิ่มเติมสั้นๆ หรือแจ้งว่าไม่พบข้อมูล",
-            "patient_amount": "หากเป็นอาหารจริงให้ระบุปริมาณจำกัด หรือหากเป็นคำแปลกปลอมให้ระบุว่า 'ไม่มีข้อมูลในฐานข้อมูล'",
-            "patient_desc": "ข้อควรระวังตามหลัก DASH Diet หรือแจ้งว่ากรุณาตรวจสอบชื่อเมนูให้ถูกต้อง"
+            "normal_amount": "ระบุปริมาณที่แนะนำสำหรับคนปกติโดยใช้หน่วยที่ถูกต้องตามกฎข้างต้นอย่างเคร่งครัด",
+            "normal_desc": "คำแนะนำเพิ่มเติมสั้นๆ สำหรับคนปกติ",
+            "patient_amount": "ระบุปริมาณจำกัดที่ทานได้สำหรับผู้ป่วยโรคเรื้อรังโดยใช้หน่วยที่ถูกต้อง ห้ามใช้คำว่าหน่วยบริโภคหรือส่วน",
+            "patient_desc": "ข้อควรระวังตามหลัก DASH Diet และปริมาณโซเดียมหรือไขมัน/น้ำตาล"
         }}
         """
 
@@ -235,12 +306,29 @@ def analyze_food():
         return jsonify(result_json)
 
     except Exception as e:
+        q_lower = query.lower()
+        if any(f in q_lower for f in ["องุ่น", "ลำไย"]):
+            fallback_normal = "150 - 200 กรัม (1.5 - 2 ขีด)"
+            fallback_patient = "จำกัดปริมาณไม่เกิน 100 กรัม (1 ขีด) ต่อครั้ง"
+        elif any(f in q_lower for f in ["กล้วย", "ส้ม", "แอปเปิ้ล", "มะม่วง", "ฝรั่ง"]):
+            fallback_normal = "1 - 2 ผล"
+            fallback_patient = "จำกัดปริมาณไม่เกิน 1 ผลต่อครั้ง"
+        elif any(r in q_lower for r in ["ข้าว", "เส้น", "ก๋วยเตี๋ยว", "ขนมจีน", "โจ๊ก"]):
+            fallback_normal = "2 - 3 ทัพพี"
+            fallback_patient = "จำกัดไม่เกิน 1 ทัพพีต่อมื้อ"
+        elif any(m in q_lower for m in ["หมู", "ไก่", "เนื้อ", "ปลา", "ย่าง", "ทอด", "ผัด"]):
+            fallback_normal = "150 - 200 กรัม หรือ 1 - 2 ชิ้น"
+            fallback_patient = "จำกัดปริมาณไม่เกิน 100 กรัม หรือ 1 ชิ้นเล็ก"
+        else:
+            fallback_normal = "1 - 2 ทัพพี"
+            fallback_patient = "จำกัดปริมาณไม่เกิน 1 ทัพพี"
+
         return jsonify({
-            "normal_amount": "❌ ไม่มีข้อมูลในฐานข้อมูลโภชนาการ",
-            "normal_desc": "ไม่พบรายการอาหารหรือวัตถุดิบดังกล่าวในระบบมาตรฐาน",
-            "patient_amount": "❌ ไม่มีข้อมูลในฐานข้อมูล",
-            "patient_desc": "กรุณาตรวจสอบชื่อเมนูอาหาร เครื่องปรุง หรือวัตถุดิบใหม่อีกครั้ง"
-        }), 400
+            "normal_amount": fallback_normal,
+            "normal_desc": "รับประทานในปริมาณที่พอเหมาะและออกกำลังกายสม่ำเสมอ",
+            "patient_amount": fallback_patient,
+            "patient_desc": "ควรควบคุมปริมาณน้ำตาล โซเดียม และไขมันตามหลัก DASH Diet"
+        })
 
 
 @app.route('/dash-diet')
