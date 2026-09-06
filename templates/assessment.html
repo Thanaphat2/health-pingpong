@@ -4,7 +4,7 @@
 <div class="bg-white shadow-xl rounded-2xl p-6 md:p-8 max-w-2xl mx-auto">
     <div class="text-center mb-6">
         <h1 class="text-2xl font-bold text-slate-800 mb-1">🩺 ประเมินสุขภาพ "ปิงปองจราจรชีวิต 7 สี"</h1>
-        <p class="text-xs text-slate-500">กรอกข้อมูลระดับน้ำตาล ความดัน และพฤติกรรมสุขภาพของคุณ เพื่อตรวจสอบความเสี่ยง</p>
+        <p class="text-xs text-slate-500">กรอกข้อมูลความดัน และพฤติกรรมสุขภาพของคุณ เพื่อตรวจสอบความเสี่ยง</p>
     </div>
 
     <!-- ฟอร์มกรอกข้อมูล -->
@@ -14,12 +14,8 @@
             <input type="text" name="name" value="{{ form_data.get('name', '') }}" required class="w-full px-4 py-2 bg-white border rounded-lg focus:ring-2 focus:ring-rose-500 outline-none" placeholder="คุณสมชาย ใจดี">
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium mb-1 text-slate-700">ระดับน้ำตาล (FBS) mg/dL:</label>
-                <input type="number" step="any" name="sugar" value="{{ form_data.get('sugar', '') }}" required class="w-full px-4 py-2 bg-white border rounded-lg focus:ring-2 focus:ring-rose-500 outline-none" placeholder="เช่น 95">
-                <span class="text-[10px] text-slate-400">เกณฑ์ปกติ: &lt; 100 mg/dL</span>
-            </div>
+        <!-- ปรับเหลือ 2 คอลัมน์สำหรับ ความดันตัวบน (SYS) และ ความดันตัวล่าง (DIA) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium mb-1 text-slate-700">ความดันตัวบน (SYS) mmHg:</label>
                 <input type="number" name="sys" value="{{ form_data.get('sys', '') }}" required class="w-full px-4 py-2 bg-white border rounded-lg focus:ring-2 focus:ring-rose-500 outline-none" placeholder="เช่น 118">
@@ -58,7 +54,7 @@
             </div>
         </div>
 
-        <!-- 🩺 ช่องเลือกโรคประจำตัว (เพิ่มส่วนนี้เข้ามา) -->
+        <!-- 🩺 ช่องเลือกโรคประจำตัว -->
         <div class="pt-2 border-t border-slate-200 space-y-2">
             <label class="block font-bold text-slate-800 text-sm">🩺 โรคประจำตัว (เลือกได้มากกว่า 1 ข้อ):</label>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-slate-700">
@@ -113,9 +109,8 @@
             {% else %}
                 <h2 class="text-base font-bold text-slate-700 border-b pb-2">📊 ผลการประเมินของคุณ: <span class="text-rose-600">{{ result.name }}</span></h2>
 
-                <!-- ข้อมูลสรุป -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs bg-slate-50 p-3 rounded-lg text-center">
-                    <div><strong>น้ำตาล (FBS):</strong><br>{{ result.sugar }} mg/dL</div>
+                <!-- ข้อมูลสรุป (ปรับให้เหลือ 3 คอลัมน์เพราะตัดระดับน้ำตาลออก) -->
+                <div class="grid grid-cols-3 gap-2 text-xs bg-slate-50 p-3 rounded-lg text-center">
                     <div><strong>ความดัน:</strong><br>{{ result.sys }}/{{ result.dia }} mmHg</div>
                     <div><strong>พฤติกรรม:</strong><br>{{ result.smoke_text }} / {{ result.alcohol_text }}</div>
                     <div><strong>ภาวะแทรกซ้อน:</strong><br>{% if result.complication == 'yes' %}มี{% else %}ไม่มี{% endif %}</div>
