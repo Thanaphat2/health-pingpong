@@ -17,7 +17,7 @@ except Exception as e:
 
 
 def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication, underlying_diseases=None):
-    """ประเมินสุขภาพตามเกณฑ์ปิงปองจราจรชีวิต 7 สี (ขาว = ปกติ, เขียวอ่อน = กลุ่มเสี่ยง)"""
+    """ประเมินสุขภาพตามเกณฑ์ปิงปองจราจรชีวิต 7 สี ควบคุมความดันโลหิตสูง (อ้างอิงตามคู่มือทางการแพทย์)"""
     if underlying_diseases is None:
         underlying_diseases = []
 
@@ -25,8 +25,8 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
         has_disease = any(
             d in underlying_diseases for d in ["diabetes", "hypertension", "kidney", "heart", "dyslipidemia"])
 
-        # 1. สีดำ (โรคแทรกซ้อน): มีภาวะแทรกซ้อน หรือความดัน >= 160/100 mmHg ร่วมกับมีภาวะแทรกซ้อน
-        if complication == "yes" or ((sys >= 160 or dia >= 100) and complication == "yes"):
+        # 1. สีดำ (โรคแทรกซ้อน): มีภาวะแทรกซ้อน หรือความดัน 160-179 / 100-109 mmHg ร่วมกับมีภาวะแทรกซ้อน
+        if complication == "yes" or ((160 <= sys <= 179 or 100 <= dia <= 109) and complication == "yes"):
             return {
                 "level": "โรคแทรกซ้อน (สีดำ)",
                 "color_name": "โรคแทรกซ้อน",
@@ -36,13 +36,13 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "border_color": "border-black",
                 "description": "ตรวจพบภาวะแทรกซ้อนจากโรคเรื้อรังร่วมกับระดับความดันโลหิตสูง",
                 "advice": [
-                    "1) เมื่อมีสัญญาณเตือน เช่น เจ็บหน้าอก หอบเหนื่อย ปากเบี้ยว พูดไม่ชัด แขนขาอ่อนแรง ให้นำส่งโรงพยาบาลเร็วที่สุด หรือโทร 1669",
-                    "2) ปฏิบัติตามคำสั่งของแพทย์อย่างเคร่งครัด และมีผู้ดูแลใกล้ชิด"
+                    "1) มีสัญญาณเตือน เช่น เจ็บหน้าอก หอบเหนื่อย ปากเบี้ยว พูดไม่ชัด แขนขาอ่อนแรง ให้นำส่งโรงพยาบาลเร็วที่สุด หรือโทร 1669",
+                    "2) หลังวิกฤต ส่งต่อได้รับการติดตามเยี่ยมบ้าน"
                 ],
                 "action": "พบแพทย์ด่วนที่สุด / ห้องฉุกเฉิน (โทร 1669)"
             }
 
-        # 2. สีแดง (วิกฤต): ความดันโลหิต >= 180 / 110 mmHg
+        # 2. สีแดง (วิกฤต): ความดันโลหิต >= 180 / 110 mmHg ขึ้นไป
         elif sys >= 180 or dia >= 110:
             return {
                 "level": "วิกฤต (สีแดง)",
@@ -54,11 +54,10 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "description": "ระดับความดันโลหิตสูงอยู่ในระดับวิกฤตอันตราย",
                 "advice": [
                     "1) 3 อ. 3 ลด",
-                    "2) รับประทานยาต่อเนื่อง",
-                    "3) ลดการบริโภคหวาน มัน เค็ม และงดสูบบุหรี่/สุราเด็ดขาด",
-                    "4) ตรวจภาวะแทรกซ้อนทางตา ไต หัวใจ เท้า อย่างน้อยปีละ 1 ครั้ง",
-                    "5) พบแพทย์ตามนัดทุก 4 สัปดาห์ หรือเมื่อมีอาการผิดปกติ",
-                    "6) ได้รับการติดตามเยี่ยมบ้าน"
+                    "2) วัดความดันโลหิตทุก 1-3 เดือน",
+                    "3) รับประทานยาต่อเนื่องและพบแพทย์ตามนัด",
+                    "4) ได้รับการติดตามเยี่ยมบ้าน",
+                    "5) ตรวจภาวะแทรกซ้อนทางตา ไต หัวใจ เท้า อย่างน้อยปีละ 1 ครั้ง"
                 ],
                 "action": "พบแพทย์ทันที"
             }
@@ -75,11 +74,9 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "description": "ระดับความดันโลหิตสูงมาก เสี่ยงต่อภาวะแทรกซ้อน",
                 "advice": [
                     "1) 3 อ. 3 ลด",
-                    "2) รับประทานยาต่อเนื่อง",
-                    "3) ลดการบริโภคหวาน, มัน, เค็ม",
-                    "4) ตรวจภาวะแทรกซ้อนทางตา ไต หัวใจ เท้า อย่างน้อยปีละ 1 ครั้ง",
-                    "5) พบแพทย์ตามนัดทุก 4 สัปดาห์ หรือเมื่อมีอาการผิดปกติ",
-                    "6) ได้รับการติดตามเยี่ยมบ้าน"
+                    "2) รับประทานยาต่อเนื่อง และพบแพทย์ตามนัด",
+                    "3) ได้รับการติดตามเยี่ยมบ้าน",
+                    "4) ตรวจภาวะแทรกซ้อนทางตา ไต หัวใจ เท้า อย่างน้อยปีละ 1 ครั้ง"
                 ],
                 "action": "พบแพทย์ภายใน 1-2 วัน"
             }
@@ -96,16 +93,15 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "description": "ระดับความดันโลหิตสูงกว่าเกณฑ์ปกติ เข้าสู่โซนเฝ้าระวัง",
                 "advice": [
                     "1) 3 อ. 3 ลด",
-                    "2) รับประทานยาต่อเนื่อง",
-                    "3) พบแพทย์ทุก 2-3 เดือน",
-                    "4) ลดการบริโภคน้ำตาล มัน เค็ม",
-                    "5) ตรวจภาวะแทรกซ้อนทางตา ไต หัวใจ เท้า อย่างน้อยปีละ 1 ครั้ง"
+                    "2) รับประทานยาต่อเนื่อง และพบแพทย์ตามนัด",
+                    "3) ลดบริโภคเค็ม",
+                    "4) ตรวจภาวะแทรกซ้อนทางตา ไต หัวใจ เท้า อย่างน้อยปีละ 1 ครั้ง"
                 ],
                 "action": "พบแพทย์ตามนัด / ปรับพฤติกรรม"
             }
 
-        # 5. สีเขียวเข้ม (คุมได้ดี): มีโรคประจำตัว (ความดันฯ) และควบคุมความดันโลหิตได้ < 139 / 89 mmHg
-        elif has_disease and (sys < 140 and dia < 90):
+        # 5. สีเขียวเข้ม (คุมได้ดี): มีโรคประจำตัว (ความดันฯ) และควบคุมความดันโลหิตได้ <= 139 / 89 mmHg
+        elif has_disease and (sys <= 139 and dia <= 89):
             return {
                 "level": "คุมได้ดี (สีเขียวเข้ม)",
                 "color_name": "คุมได้ดี",
@@ -116,10 +112,10 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "description": "มีโรคประจำตัว แต่สามารถควบคุมระดับความดันโลหิตให้อยู่ในเกณฑ์ได้ดี",
                 "advice": [
                     "1) 3 อ. 3 ลด",
-                    "2) รับประทานยาต่อเนื่อง",
-                    "3) พบแพทย์ทุก 2-3 เดือน",
-                    "4) ลดการบริโภคน้ำตาลสำหรับผู้ป่วยเบาหวาน",
-                    "5) ลดการบริโภคอาหารเค็มสำหรับผู้ป่วยความดันโลหิตสูง"
+                    "2) วัดความดันโลหิตทุก 1-3 เดือน",
+                    "3) รับประทานยาต่อเนื่อง",
+                    "4) พบแพทย์ทุก 2-3 เดือน",
+                    "5) ลดบริโภคเค็ม"
                 ],
                 "action": "รักษาพฤติกรรมต่อเนื่อง / พบแพทย์ตามนัด"
             }
@@ -136,9 +132,9 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "description": "อยู่ในกลุ่มเสี่ยงเริ่มสูง (Pre-hypertension)",
                 "advice": [
                     "1) 3 อ. 3 ลด",
-                    "2) วัดความดันโลหิต และตรวจวัดความดันโลหิตทุก 1-3 เดือน",
+                    "2) วัดความดันโลหิตทุก 1-3 เดือน",
                     "3) พบแพทย์ทุก 2-3 เดือน",
-                    "4) ลดการบริโภคอาหารเค็มสำหรับผู้ป่วยความดันโลหิตสูง"
+                    "4) ลดบริโภคเค็ม"
                 ],
                 "action": "ปรับพฤติกรรม / ตรวจติดตามสุขภาพ"
             }
@@ -154,8 +150,8 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "border_color": "border-slate-300",
                 "description": "ระดับความดันโลหิตอยู่ในเกณฑ์ปกติ สุขภาพดีเยี่ยม",
                 "advice": [
-                    "1) 3 อ. 3 ลด",
-                    "2) ตรวจวัดความดันโลหิตทุก 1 ปี"
+                    "1) 3 อ. 3 ลด (อาหาร ผัก ผลไม้, ออกกำลังกาย 30 นาที, อารมณ์ สอง, ลดเหล้า, ลดบุหรี่, ลดอ้วน)",
+                    "2) ตรวจความดันโลหิตทุก 1 ปี"
                 ],
                 "action": "รักษาสุขภาพอย่างต่อเนื่อง"
             }
@@ -171,7 +167,7 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                     "badge_color": "bg-emerald-800 text-white",
                     "border_color": "border-emerald-700",
                     "description": "มีโรคประจำตัว ติดตามอาการและพบแพทย์สม่ำเสมอ",
-                    "advice": ["ปฏิบัติตามคำแนะนำของแพทย์อย่างเคร่งครัด"],
+                    "advice": ["1) 3 อ. 3 ลด", "2) รับประทานยาต่อเนื่อง", "3) พบแพทย์ทุก 2-3 เดือน"],
                     "action": "พบแพทย์ตามนัด"
                 }
             return {
@@ -182,7 +178,7 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "badge_color": "bg-slate-100 text-slate-800 border border-slate-200",
                 "border_color": "border-slate-300",
                 "description": "ระดับความดันโลหิตอยู่ในเกณฑ์ปกติ",
-                "advice": ["รักษาสุขภาพอย่างต่อเนื่อง"],
+                "advice": ["1) 3 อ. 3 ลด", "2) ตรวจความดันโลหิตทุก 1 ปี"],
                 "action": "รักษาสุขภาพ"
             }
     except Exception:
@@ -211,12 +207,13 @@ def assessment():
 
             form_data = {
                 'name': name, 'sys': sys, 'dia': dia,
-                'smoke': smoke, 'alcohol': alcohol, 'exercise': exercise, 
+                'smoke': smoke, 'alcohol': alcohol, 'exercise': exercise,
                 'complication': complication, 'underlying_disease': underlying_diseases
             }
 
-            evaluation = evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication, underlying_diseases)
-            
+            evaluation = evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
+                                                    underlying_diseases)
+
             ai_advice = ""
             if client and evaluation:
                 try:
@@ -266,7 +263,7 @@ def analyze_food():
 
 def get_smart_fallback_analysis(query):
     q = query.lower()
-    
+
     if any(k in q for k in ["ไข่ดาว", "ไข่เจียว", "ไข่ตุ๋น", "ไข่ต้ม", "ไข่"]):
         return {
             "patient_amount": f"1 ส่วนของ {query}: เท่ากับ ไข่ไก่ 1 ฟอง (ให้พลังงานประมาณ 75-150 กิโลแคลอรี ขึ้นอยู่กับวิธีปรุง) | โควตาสูงสุดต่อวัน: แนะนำไม่เกิน 1-2 ฟองต่อวัน (ตามโควต้าเนื้อสัตว์และไขมันใน DASH Diet)",
