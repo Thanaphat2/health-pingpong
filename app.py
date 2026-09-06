@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 app.secret_key = 'health_pingpong_secret_key'
 
-# 🔒 ดึง API Key จาก Environment Variable โดยปลอดภัย (GitHub จะไม่บล็อก)
+# 🔒 ดึง API Key จาก Environment Variable อย่างปลอดภัยเพื่อป้องกันการถูกบล็อกบน GitHub
 api_key = os.environ.get("GEMINI_API_KEY", "").strip()
 
 try:
@@ -17,7 +17,7 @@ except Exception as e:
 
 
 def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication, underlying_diseases=None):
-    """ประเมินสุขภาพตามเกณฑ์ปิงปอง 7 สี อ้างอิงตามเกณฑ์ความดันโลหิตที่กำหนด"""
+    """ประเมินสุขภาพตามเกณฑ์ปิงปองจราจรชีวิต 7 สี (ขาว = ปกติ, เขียวอ่อน = กลุ่มเสี่ยง)"""
     if underlying_diseases is None:
         underlying_diseases = []
 
@@ -124,13 +124,13 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "action": "รักษาพฤติกรรมต่อเนื่อง / พบแพทย์ตามนัด"
             }
 
-        # 6. สีเขียวอ่อน (เสี่ยง): ความดันโลหิต 120-139 / 80-89 mmHg
+        # 6. สีเขียวอ่อน (กลุ่มเสี่ยง): ความดันโลหิต 120-139 / 80-89 mmHg
         elif (120 <= sys <= 139) or (80 <= dia <= 89):
             return {
-                "level": "เสี่ยง (สีเขียวอ่อน)",
-                "color_name": "เสี่ยง",
-                "color_code": "#38bdf8",
-                "bg_color": "bg-sky-400 text-white",
+                "level": "กลุ่มเสี่ยง (สีเขียวอ่อน)",
+                "color_name": "กลุ่มเสี่ยง",
+                "color_code": "#86efac",
+                "bg_color": "bg-emerald-400 text-slate-900",
                 "badge_color": "bg-emerald-200 text-emerald-900",
                 "border_color": "border-emerald-300",
                 "description": "อยู่ในกลุ่มเสี่ยงเริ่มสูง (Pre-hypertension)",
@@ -148,10 +148,10 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
             return {
                 "level": "ปกติ (สีขาว)",
                 "color_name": "ปกติ",
-                "color_code": "#10b981",
-                "bg_color": "bg-emerald-500 text-white",
-                "badge_color": "bg-gray-100 text-gray-800",
-                "border_color": "border-gray-300",
+                "color_code": "#ffffff",
+                "bg_color": "bg-white text-slate-800 border border-slate-300 shadow-xs",
+                "badge_color": "bg-slate-100 text-slate-800 border border-slate-200",
+                "border_color": "border-slate-300",
                 "description": "ระดับความดันโลหิตอยู่ในเกณฑ์ปกติ สุขภาพดีเยี่ยม",
                 "advice": [
                     "1) 3 อ. 3 ลด",
@@ -160,7 +160,7 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
                 "action": "รักษาสุขภาพอย่างต่อเนื่อง"
             }
 
-        # Fallback สำรอง
+        # Fallback สำรอง กรณีอื่นๆ
         else:
             if has_disease:
                 return {
@@ -177,10 +177,10 @@ def evaluate_pingpong_7_colors(sys, dia, smoke, alcohol, exercise, complication,
             return {
                 "level": "ปกติ (สีขาว)",
                 "color_name": "ปกติ",
-                "color_code": "#10b981",
-                "bg_color": "bg-emerald-500 text-white",
-                "badge_color": "bg-gray-100 text-gray-800",
-                "border_color": "border-gray-300",
+                "color_code": "#ffffff",
+                "bg_color": "bg-white text-slate-800 border border-slate-300 shadow-xs",
+                "badge_color": "bg-slate-100 text-slate-800 border border-slate-200",
+                "border_color": "border-slate-300",
                 "description": "ระดับความดันโลหิตอยู่ในเกณฑ์ปกติ",
                 "advice": ["รักษาสุขภาพอย่างต่อเนื่อง"],
                 "action": "รักษาสุขภาพ"
