@@ -1,24 +1,79 @@
 {% extends "base.html" %}
 
-{% block title %}HealthPingpong - ภาวะแทรกซ้อนจากโรคเรื้อรัง{% endblock %}
+{% block title %}HealthPingpong - พยาธิสภาพ & ภาวะแทรกซ้อน{% endblock %}
 
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    
+
     <!-- Header -->
-    <div class="text-center max-w-2xl mx-auto mb-12">
+    <div class="text-center max-w-2xl mx-auto mb-10">
         <div class="inline-flex items-center justify-center p-3.5 bg-amber-50 rounded-2xl mb-4 shadow-2xs">
             <span class="text-4xl">⚠️</span>
         </div>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">การเฝ้าระวังภาวะแทรกซ้อนจากโรคเรื้อรัง</h1>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">การเฝ้าระวังพยาธิสภาพและภาวะแทรกซ้อนจากโรคเรื้อรัง</h1>
         <p class="text-slate-600 text-base leading-relaxed">
             โรคเบาหวานและความดันโลหิตสูงหากไม่ได้รับการควบคุมที่ดี อาจนำไปสู่ภาวะแทรกซ้อนรุนแรงต่ออวัยวะสำคัญ เรียนรู้วิธีสังเกตอาการและป้องกันล่วงหน้า
         </p>
     </div>
 
+    <!-- 🎥 ส่วนวิดีโอความรู้ (เปลี่ยนเป็น VDO เรียบร้อย) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+
+        <!-- วิดีโอที่ 1: พยาธิสภาพโรคความดันโลหิตสูง -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="space-y-1">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <span>🎥</span> VDO พยาธิสภาพโรคความดันโลหิตสูง
+                </h2>
+                <p class="text-xs text-slate-500">
+                    วิดีโอแนะนำและอธิบายพยาธิสภาพของโรคความดันโลหิตสูง เพื่อทำความเข้าใจกลไกความผิดปกติของหลอดเลือด
+                </p>
+            </div>
+
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-center space-y-4">
+                <p class="text-xs text-slate-600">
+                    คลิกที่ปุ่มด้านล่างเพื่อเปิดรับชมวิดีโอจาก Google Drive
+                </p>
+                <div>
+                    <a href="https://drive.google.com/file/d/1PPBKTFSQEcQc9mnq7hWp1obbIjL4totf/view?usp=drive_link"
+                       target="_blank"
+                       class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl transition duration-200 shadow-md text-xs">
+                        <span>▶</span> เปิดดู VDO พยาธิสภาพโรคความดัน
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- วิดีโอที่ 2: ความดันโลหิตสูงสู่โรค Stroke -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="space-y-1">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <span>🎥</span> VDO ความดันโลหิตสูงสู่โรค Stroke
+                </h2>
+                <p class="text-xs text-slate-500">
+                    วิดีโอแนะนำความเชื่อมโยงอันตรายจากความดันโลหิตสูงนำไปสู่โรคหลอดเลือดสมอง (Stroke)
+                </p>
+            </div>
+
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-center space-y-4">
+                <p class="text-xs text-slate-600">
+                    คลิกที่ปุ่มด้านล่างเพื่อเปิดรับชมวิดีโอจาก Google Drive
+                </p>
+                <div>
+                    <a href="https://drive.google.com/file/d/17506UOJBLk4Y7Ws0M_GIAsmkEPYjS5PE/view?usp=drive_link"
+                       target="_blank"
+                       class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl transition duration-200 shadow-md text-xs">
+                        <span>▶</span> เปิดดู VDO ความดันสู่โรค Stroke
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <!-- 4 Major Complications Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        
+
         <!-- 1. โรคไตเรื้อรัง (Kidney Disease) -->
         <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
             <div>
@@ -140,4 +195,3 @@
 
 </div>
 {% endblock %}
-
